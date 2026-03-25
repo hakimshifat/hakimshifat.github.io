@@ -20,8 +20,4 @@ A beautiful reminder that intensity can come from pacing as much as plot. Dostoe
 
 ## Favorite Passage
 
-> "My God! A whole moment of happiness! Is that too little for the whole life of a man?"
-
-## When I Read It
-
-March 2026. Read in one sitting on a rainy afternoon.
+"Your hand is cold, mine burns like fire. How blind you are, Nastenka!"
