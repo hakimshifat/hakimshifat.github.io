@@ -1,0 +1,112 @@
+---
+import { getEntry } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import { ShieldAlert, Laptop, Terminal, PenTool } from 'lucide-react';
+
+const whoAmI = await getEntry('about', 'who-am-i');
+const interests = await getEntry('about', 'what-im-interested-in');
+
+if (!whoAmI || !interests) {
+	throw new Error('Required content entries not found in about collection');
+}
+
+const { Content: WhoAmIContent } = await whoAmI.render();
+const { Content: InterestsContent } = await interests.render();
+
+const whatIDoCards = [
+	{
+		title: "Security Research",
+		description: "Participating in CTF competitions and security research, focusing on web exploitation and Reverse Engineering.",
+		icon: ShieldAlert,
+		emoji: "🔐"
+	},
+	{
+		title: "Software Development",
+		description: "Trying to learn Building web applications and tools with modern technologies like Astro, TypeScript, and Node.js.",
+		icon: Laptop,
+		emoji: "💻"
+	},
+	{
+		title: "Competitive Programming",
+		description: "Like seeing that green \"accepted\" label",
+		icon: Laptop,
+		emoji: "⌨"
+	},
+	{
+		title: "Linux Ricing",
+		description: "Daily driving Linux, customizing workflows, and sharing knowledge about open-source tools.",
+		icon: Terminal,
+		emoji: "🐧"
+	},
+	{
+		title: "Content Creation",
+		description: "Writing technical blog posts, tutorials, and writeups to help others learn.",
+		icon: PenTool,
+		emoji: "📝"
+	},
+	{
+		title: "Watch Too Much Anime and Sitcoms",
+		description: "Probably watching shows instead of sleeping",
+		icon: ShieldAlert,
+		emoji: "📺"
+	}
+];
+
+const skills = [
+	"Linux/Unix", "Bash Scripting", "Python", "Node.js", "Web Security", "CTF", "Git", "Docker"];
+---
+
+<Layout title="ABOUT // Portfolio_OS">
+	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
+
+	<div class="relative z-10 max-w-5xl mx-auto">
+		<header class="py-20 text-center">
+			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">About</h1>
+			<p class="font-mono text-[11px] uppercase tracking-[0.4em] text-[var(--ink-muted)]">Get to know me better</p>
+			<div class="w-full h-[1px] bg-[var(--line)] mt-12"></div>
+		</header>
+
+		<section class="py-12">
+			<h2 class="text-3xl font-display italic text-[var(--accent)] mb-8">Who Am I?</h2>
+			<div class="prose prose-lg max-w-none font-light leading-relaxed">
+				<WhoAmIContent />
+			</div>
+		</section>
+
+		<section class="py-20">
+			<h2 class="text-3xl font-display italic text-[var(--accent)] mb-12">What I Do</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				{whatIDoCards.map((card) => (
+					<div class="p-8 border border-[var(--line)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-all duration-500 group">
+						<div class="flex items-center gap-4 mb-6">
+							<span class="text-2xl">{card.emoji}</span>
+							<h3 class="text-2xl font-display italic text-[var(--ink)]">{card.title}</h3>
+						</div>
+						<p class="text-lg font-light text-[var(--ink-secondary)] leading-relaxed group-hover:text-[var(--ink)] transition-colors">
+							{card.description}
+						</p>
+					</div>
+				))}
+			</div>
+		</section>
+
+
+		<section class="py-20">
+			<h2 class="text-3xl font-display italic text-[var(--accent)] mb-12">Skills & Technologies</h2>
+			<div class="flex flex-wrap gap-3">
+				{skills.map((skill) => (
+					<span class="px-6 py-3 border border-[var(--line)] font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all cursor-default">
+						{skill}
+					</span>
+				))}
+			</div>
+		</section>
+
+		<section class="py-20 pb-32">
+			<h2 class="text-3xl font-display italic text-[var(--accent)] mb-8">Interests</h2>
+			<div class="prose prose-lg max-w-none font-light leading-relaxed">
+				<InterestsContent />
+			</div>
+		</section>
+	</div>
+</Layout>

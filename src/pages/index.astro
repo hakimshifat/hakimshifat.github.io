@@ -1,0 +1,129 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const latestPosts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
+---
+
+<Layout title="Hakim Shifat Portfolio">
+	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
+
+	<div class="relative z-10">
+		<section class="py-20 md:py-32 border-b border-[var(--line)]">
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+				<div class="flex flex-col gap-6">
+					<div class="flex items-center gap-4">
+						<div class="w-2 h-2 rounded-full bg-[var(--accent)]"></div>
+						<span class="font-mono text-[13px] uppercase tracking-wide text-[var(--ink-secondary)]">System Initialized // 2026.03.20</span>
+					</div>
+					<h1 class="text-5xl md:text-7xl lg:text-7xl font-display font-normal leading-[0.9] tracking-tight text-[var(--ink)]">
+						Abdul Hakim<br/>
+						<span class="italic text-[var(--accent)]">Shifat</span>
+					</h1>
+					<div class="flex flex-col md:flex-row gap-12 mt-12">
+						<p class="max-w-md text-lg text-[var(--ink-secondary)] leading-relaxed">
+						Like to break things and find out why
+						</p>
+						<div class="flex flex-col gap-3 font-mono text-[13px] uppercase tracking-wide text-[var(--ink-muted)]">
+							<p>Location: [REDACTED]</p>
+						<!-- <span class="italic text-[var(--accent)]">ACTIVE</span> -->
+							<p>Status: ACTIVE</p>
+							<p>Role: System ARCHITECT</p>
+						</div>
+					</div>
+				</div>
+				<div class="hidden lg:flex justify-center items-center relative group">
+					<div class="relative w-4/5 max-w-md aspect-[3/4] overflow-hidden border border-[var(--line)] z-10">
+						<img
+							 src="/abdulhakim.png"
+							alt="Monolith OS Interface"
+							class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
+							referrerpolicy="no-referrer"
+						/>
+						<div class="absolute inset-0 bg-gradient-to-t from-[var(--bg)]/60 via-transparent to-transparent"></div>
+
+						{/* Technical Corner Markers */}
+						<div class="absolute top-4 left-4 w-4 h-4 border-t border-l border-[var(--accent)]"></div>
+						<div class="absolute top-4 right-4 w-4 h-4 border-t border-r border-[var(--accent)]"></div>
+						<div class="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-[var(--accent)]"></div>
+						<div class="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-[var(--accent)]"></div>
+
+						<div class="absolute bottom-8 left-8 font-mono text-[12px] uppercase tracking-wider text-[var(--accent)]">
+							Visual_Data_Stream // 0xFA23
+						</div>
+					</div>
+
+					{/* Stylish Offset Border */}
+					<div class="absolute w-4/5 max-w-md aspect-[3/4] border border-[var(--accent)] translate-x-6 translate-y-6 -z-0 group-hover:translate-x-4 group-hover:translate-y-4 transition-transform duration-700"></div>
+
+					{/* Floating Technical Data */}
+					<div class="absolute -right-4 top-1/4 font-mono text-[11px] text-[var(--ink-muted)] vertical-rl tracking-wider uppercase pointer-events-none">
+						System_Core_Active // 99.8%
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Latest Writing Section -->
+		<section class="py-32 border-b border-[var(--line)]">
+			<div class="mb-20">
+				<!-- <span class="font-mono text-[13px] uppercase tracking-wider text-[var(--ink-muted)] block mb-4">FROM THE BLOG</span> -->
+				<h2 class="text-5xl font-display italic font-normal text-[var(--ink)]">Latest writings</h2>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+				{latestPosts.map((post) => (
+					<article class="flex flex-col gap-8 group">
+						<a href={`/blog/${post.slug}`} class="aspect-video overflow-hidden bg-[var(--bg-secondary)] relative block border border-[var(--line)]">
+							{/* Technical UI Elements */}
+							<div class="absolute inset-0 z-10 pointer-events-none">
+								<div class="absolute top-4 left-4 right-4 h-[1px] bg-[var(--line)]"></div>
+								<div class="absolute top-4 right-4 w-[1px] h-12 bg-[var(--line)]"></div>
+								<div class="absolute top-4 right-4 w-1 h-1 bg-[var(--accent)] rounded-full"></div>
+								<div class="absolute bottom-4 left-4 font-mono text-[11px] text-[var(--ink-muted)] uppercase tracking-wide">
+									{post.slug.toUpperCase()} // 0x{Math.floor(Math.random() * 1000).toString(16)}
+								</div>
+							</div>
+
+							<img
+								src={post.data.heroImage || `https://picsum.photos/seed/${post.slug}/800/450`}
+								alt={post.data.title}
+								class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
+								referrerpolicy="no-referrer"
+							/>
+						</a>
+
+						<div class="flex flex-col gap-4">
+							<div class="flex gap-2 items-center">
+								{post.data.tags.slice(0, 2).map((tag, i) => (
+									<>
+										<span class="font-mono text-[12px] uppercase tracking-wide text-[var(--ink-muted)]">{tag}</span>
+										{i === 0 && post.data.tags.length > 1 && <span class="w-1 h-1 rounded-full bg-[var(--line)]"></span>}
+									</>
+								))}
+							</div>
+							<a href={`/blog/${post.slug}`} class="group-hover:text-[var(--accent)] transition-colors">
+								<h3 class="text-2xl font-display font-normal leading-tight tracking-tight text-[var(--ink)]">{post.data.title}</h3>
+							</a>
+							<p class="text-[16px] text-[var(--ink-secondary)] font-light leading-relaxed line-clamp-3">
+								{post.data.description}
+							</p>
+							<a href={`/blog/${post.slug}`} class="font-mono text-[13px] text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-all">
+								read more ...
+							</a>
+							<div class="mt-2 font-mono text-[13px] text-[var(--ink-muted)] uppercase tracking-wide">
+								{post.data.pubDate.toLocaleDateString('en-US', {
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric',
+								})}
+							</div>
+						</div>
+					</article>
+				))}
+			</div>
+		</section>
+	</div>
+</Layout>

@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import MediaGallery from '../components/MediaGallery';
+
+const media = await getCollection('media');
+const sortedMedia = media.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Map to the structure expected by the React component
+const galleryMedia = sortedMedia.map(item => ({
+	slug: item.slug,
+	data: item.data
+}));
+---
+
+<Layout title="MEDIA // Portfolio_OS">
+	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
+
+	<div class="relative z-10">
+		<header class="py-20 border-b border-[var(--line)] text-center">
+			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Media</h1>
+			<p class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">Visual Records: [MOVIES_SERIES_ANIME_BOOKS]</p>
+		</header>
+
+		<section class="py-20">
+			<MediaGallery client:load media={galleryMedia} />
+		</section>
+	</div>
+</Layout>

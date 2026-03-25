@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const education = [
+	{
+		year: "2023 - ",
+		title: "Bsc in Computer Science and Engineering",
+		institution: "Bangladesh University of Professionals(BUP)",
+		description: "Somehow Surviving",
+		status: "Ongoing"
+	},
+{
+		year: "2020-21",
+		title: "Higher Secondary School Certificate(HSC)",
+		institution: "Nawab Faizunnessa Govt. College",
+		description: "After first 6 months of offline class, COVID-19 happened and all went to online",
+		status: "(somehow)COMPLETED"
+	},
+	{
+		year: "2014 - 2019",
+		title: "Secondary School Certificate(SSC)",
+		institution: "Kakirtala High School",
+		description: "Also did JSC",
+		status: "COMPLETED"
+	},
+	{
+		year: "2008 - 2013",
+		title: "Class 1 - Class 5",
+		institution: "Kadaba Govt. Primary School",
+		description: "Did PSC",
+		status: "COMPLETED"
+	}
+];
+---
+
+<Layout title="EDUCATION // Portfolio_OS">
+	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
+
+	<div class="relative z-10">
+		<header class="py-20 border-b border-[var(--line)] text-center">
+			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Education</h1>
+			<p class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">Academic Records</p>
+		</header>
+
+		<section class="py-20">
+			<div class="relative max-w-6xl mx-auto">
+				{/* Center Timeline Line - hidden on mobile */}
+				<div class="hidden md:block absolute left-1/2 top-8 bottom-0 w-[1px] bg-[var(--accent)] -translate-x-1/2"></div>
+
+				{education.map((item, index) => (
+					<div class={`relative flex flex-col md:flex-row items-center mb-20 last:mb-0 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+						{/* Left Side Content */}
+						<div class={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'} flex flex-col items-center ${index % 2 === 0 ? 'md:items-end' : 'md:items-start'} mb-8 md:mb-0`}>
+							<div class="flex flex-col gap-4">
+								<div class={`flex items-center gap-4 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+									<span class="font-mono text-[11px] uppercase tracking-widest text-[var(--accent)]">{item.year}</span>
+									<span class="w-8 h-[1px] bg-[var(--line)]"></span>
+									<span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-muted)]">{item.status}</span>
+								</div>
+
+								<div>
+									<h2 class="text-4xl font-display italic mb-2 text-[var(--ink)]">{item.title}</h2>
+									<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)] mb-6">@ {item.institution}</p>
+									<p class="text-lg font-light text-[var(--ink-secondary)] leading-relaxed max-w-2xl">
+										{item.description}
+									</p>
+								</div>
+
+								<div class={`flex gap-2 mt-4 ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'} justify-center`}>
+									<div class="w-1 h-1 bg-[var(--line)]"></div>
+									<div class="w-1 h-1 bg-[var(--line)]"></div>
+									<div class="w-1 h-1 bg-[var(--line)]"></div>
+								</div>
+							</div>
+						</div>
+
+						{/* Center Timeline Dot - hidden on mobile */}
+						<div class="hidden md:block absolute left-1/2 top-8 w-[14px] h-[14px] border-2 border-[var(--accent)] bg-[var(--bg)] rounded-full z-10 -translate-x-1/2">
+							<div class="absolute inset-[3px] bg-[var(--accent)] rounded-full"></div>
+						</div>
+
+						{/* Right Side (Empty for spacing) */}
+						<div class="hidden md:block w-1/2"></div>
+					</div>
+				))}
+			</div>
+		</section>
+
+		<section class="py-20 border-t border-[var(--line)]">
+			<div class="flex flex-col md:flex-row justify-between items-start gap-12">
+				<div class="max-w-md">
+					<h3 class="font-mono text-[14px] uppercase tracking-widest text-[var(--ink-secondary)] mb-6">Continuous Learning</h3>
+					<p class="text-sm font-light text-[var(--ink-secondary)] leading-relaxed">
+						Actively participating in open-source research and specialized technical workshops to maintain system edge.
+					</p>
+				</div>
+				<div class="grid grid-cols-2 gap-x-12 gap-y-4">
+					<span class="font-mono text-[12px] uppercase text-[var(--ink-muted)]">Distributed Systems</span>
+					<span class="font-mono text-[12px] uppercase text-[var(--ink-muted)]">Type Theory</span>
+					<span class="font-mono text-[12px] uppercase text-[var(--ink-muted)]">Generative UI</span>
+					<span class="font-mono text-[12px] uppercase text-[var(--ink-muted)]">Performance Opt</span>
+				</div>
+			</div>
+		</section>
+	</div>
+</Layout>

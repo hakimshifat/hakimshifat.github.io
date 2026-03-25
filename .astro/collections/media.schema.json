@@ -1,0 +1,61 @@
+{
+  "$ref": "#/definitions/media",
+  "definitions": {
+    "media": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "movie",
+            "series",
+            "anime",
+            "book"
+          ]
+        },
+        "image": {
+          "type": "string"
+        },
+        "rating": {
+          "type": "string"
+        },
+        "year": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "pubDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "category",
+        "image",
+        "pubDate"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

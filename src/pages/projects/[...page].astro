@@ -1,0 +1,88 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import type { Page, GetStaticPathsOptions } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+	const projects = (await getCollection('projects')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+	);
+	return paginate(projects, { pageSize: 10 });
+}
+
+interface Props {
+	page: Page<CollectionEntry<'projects'>>;
+}
+
+const { page } = Astro.props;
+---
+
+<Layout title="PROJECTS // Portfolio_OS">
+	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
+
+	<div class="relative z-10">
+		<header class="py-20 border-b border-[var(--line)] text-center">
+			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Projects</h1>
+			<p class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">System Output: ACTIVE_DEVELOPMENT // Page {page.currentPage}</p>
+		</header>
+
+		<section class="py-20 grid grid-cols-1 md:grid-cols-2 gap-12">
+			{page.data.map((project, index) => (
+				<div class="group border border-[var(--line)] p-0 hover:border-[var(--accent)] transition-all duration-500 overflow-hidden flex flex-col">
+					<div class="aspect-video overflow-hidden relative border-b border-[var(--line)]">
+						<img
+							src={project.data.heroImage || `https://picsum.photos/seed/${project.slug}/800/450`}
+							alt={project.data.title}
+							class="w-full h-full object-cover group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+							referrerpolicy="no-referrer"
+						/>
+						<div class="absolute top-6 left-6 font-mono text-[10px] text-[var(--ink-muted)] bg-[var(--bg)]/60 backdrop-blur-sm px-2 py-1 border border-[var(--line)]">
+							0{((page.currentPage - 1) * 10) + index + 1} // PROJECT
+						</div>
+					</div>
+					<div class="p-12 flex-1 flex flex-col">
+						<h2 class="text-5xl font-display mb-6 group-hover:italic transition-all text-[var(--ink)]">{project.data.title}</h2>
+						<p class="text-lg text-[var(--ink-secondary)] font-light mb-12 leading-relaxed flex-1">
+							{project.data.description}
+						</p>
+						<div class="flex flex-wrap gap-4 mb-12">
+							{project.data.tags.map(tag => (
+								<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">{tag}</span>
+							))}
+						</div>
+						<a href={`/projects/${project.slug}`} class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] group-hover:text-[var(--accent)] transition-colors">
+							View Documentation →
+						</a>
+					</div>
+				</div>
+			))}
+		</section>
+
+		{page.lastPage > 1 && (
+			<nav class="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+				{page.url.prev ? (
+					<a href={page.url.prev} class="hover:text-[var(--accent)] transition-colors">← PREV_PAGE</a>
+				) : (
+					<span class="text-[var(--ink-muted)]">← PREV_PAGE</span>
+				)}
+
+				<div class="flex gap-4">
+					{Array.from({ length: page.lastPage }, (_, i) => i + 1).map(num => (
+						<a
+							href={num === 1 ? '/projects' : `/projects/${num}`}
+							class={page.currentPage === num ? 'text-[var(--accent)]' : 'text-[var(--ink-secondary)] hover:text-[var(--ink)]'}
+						>
+							{num.toString().padStart(2, '0')}
+						</a>
+					))}
+				</div>
+
+				{page.url.next ? (
+					<a href={page.url.next} class="hover:text-[var(--accent)] transition-colors">NEXT_PAGE →</a>
+				) : (
+					<span class="text-[var(--ink-muted)]">NEXT_PAGE →</span>
+				)}
+			</nav>
+		)}
+	</div>
+</Layout>

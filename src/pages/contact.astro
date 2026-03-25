@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Mail, Github, Linkedin, ShieldAlert, CheckCircle2, ArrowUpRight } from 'lucide-react';
+
+const contactMethods = [
+	{
+		title: "Email",
+		handle: "hakim.shifat@gmail.com",
+		link: "mailto:hakim.shifat@gmail.com",
+		icon: Mail,
+		action: "Send a message"
+	},
+	{
+		title: "GitHub",
+		handle: "@hakimshifat",
+		link: "https://github.com/hakimshifat",
+		icon: Github,
+		action: "View profile"
+	},
+	{
+		title: "LinkedIn",
+		handle: "/in/hakimshifat",
+		link: "https://linkedin.com/in/hakimshifat",
+		icon: Linkedin,
+		action: "Connect"
+	},
+	{
+		title: "CTFTime",
+		handle: "Team #408973",
+		link: "https://ctftime.org/team/408973",
+		icon: ShieldAlert,
+		action: "View team"
+	},
+];
+
+const availability = [
+	"Software Development Projects",
+	"Security Research Collaborations",
+	"CTF Team Participation",
+	"Open Source Contributions"
+];
+---
+
+<Layout title="CONTACT // Portfolio_OS">
+	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
+
+	<div class="relative z-10 max-w-4xl mx-auto">
+		<header class="py-20 text-center">
+			<h1 class="text-6xl md:text-8xl font-display italic tracking-tighter text-[var(--ink)] mb-6">Contact Me</h1>
+			<p class="font-mono text-[11px] uppercase tracking-[0.4em] text-[var(--ink-muted)] mb-12">Let's connect and collaborate</p>
+
+			<div class="w-full h-[1px] bg-[var(--line)] mb-12"></div>
+
+			<p class="text-lg md:text-xl font-light text-[var(--ink-secondary)] leading-relaxed max-w-2xl mx-auto">
+				I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Feel free to reach out through any of the channels below!
+			</p>
+		</header>
+
+		<section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-32">
+			{contactMethods.map((method) => (
+				<a
+					href={method.link}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="group p-10 border border-[var(--line)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-all duration-500 flex flex-col items-center text-center"
+				>
+					<div class="mb-8 p-4 rounded-full bg-[var(--line)] group-hover:bg-[var(--accent)]/10 transition-colors duration-500">
+						<method.icon className="w-8 h-8 text-[var(--accent)]" />
+					</div>
+					<h3 class="text-2xl font-display italic mb-2 text-[var(--ink)]">{method.title}</h3>
+					<p class="font-mono text-[10px] uppercase tracking-widest text-[var(--ink-muted)] mb-8">{method.handle}</p>
+
+					<div class="flex items-center gap-2 text-[11px] font-mono uppercase tracking-widest text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+						{method.action}
+						<ArrowUpRight className="w-3 h-3" />
+					</div>
+				</a>
+			))}
+		</section>
+
+		<section class="pb-32">
+			<div class="text-center mb-16">
+				<h2 class="text-4xl font-display italic tracking-tight text-[var(--accent)]">Available For</h2>
+			</div>
+
+			<div class="flex flex-col gap-4 max-w-xl mx-auto">
+				{availability.map((item) => (
+					<div class="flex items-center gap-6 p-6 border border-[var(--line)] bg-[var(--bg-secondary)] hover:border-[var(--accent)]/30 transition-colors">
+						<CheckCircle2 className="w-5 h-5 text-[var(--accent)] shrink-0" />
+						<span class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">{item}</span>
+					</div>
+				))}
+			</div>
+		</section>
+	</div>
+</Layout>
