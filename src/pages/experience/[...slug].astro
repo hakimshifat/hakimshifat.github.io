@@ -1,0 +1,156 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const experiences = await getCollection('experience');
+	return experiences.map((experience) => ({
+		params: { slug: experience.slug },
+		props: experience,
+	}));
+}
+
+const experience = Astro.props as CollectionEntry<'experience'>;
+const { Content } = await experience.render();
+---
+
+<Layout title={`${experience.data.title} @ ${experience.data.company} // Portfolio_OS`} description={experience.data.description}>
+	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
+
+	<div class="relative z-10">
+		<article class="py-20 max-w-3xl mx-auto">
+			<header class="mb-16">
+				<div class="flex items-center gap-4 mb-6">
+					<div class="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
+					<span class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+						{experience.data.startDate.toLocaleDateString('en-US', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						})}
+						{!experience.data.current && experience.data.endDate && ` - ${experience.data.endDate.toLocaleDateString('en-US', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						})}`}
+						{experience.data.current && ' - Present'}
+					</span>
+				</div>
+				<h1 class="text-5xl md:text-7xl font-display font-light leading-[0.9] tracking-tighter mb-6 text-[var(--ink)]">
+					{experience.data.title}
+				</h1>
+				<a href={`/experience`} class="text-2xl md:text-3xl font-mono text-[var(--accent)] hover:underline transition-colors">
+					@ {experience.data.company}
+				</a>
+				<div class="flex flex-wrap gap-3 mt-8">
+					{experience.data.location && (
+						<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-3 py-1">
+							📍 {experience.data.location}
+						</span>
+					)}
+					<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-secondary)] border border-[var(--line)] px-3 py-1">
+						{experience.data.type}
+					</span>
+					{experience.data.current && (
+						<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--accent)] border border-[var(--accent)] px-3 py-1">
+							CURRENT
+						</span>
+					)}
+				</div>
+			</header>
+
+			{experience.data.heroImage && (
+				<div class="mb-16 aspect-video overflow-hidden border border-[var(--line)]">
+					<img
+						src={experience.data.heroImage}
+						alt={experience.data.title}
+						class="w-full h-full object-cover"
+						referrerpolicy="no-referrer"
+					/>
+				</div>
+			)}
+
+			<div class="prose max-w-none font-sans leading-relaxed text-lg">
+				<Content />
+			</div>
+
+			<footer class="mt-20 pt-12 border-t border-[var(--line)]">
+				<div class="flex flex-wrap gap-3 mb-12">
+					{experience.data.tags.map((tag) => (
+						<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-3 py-1">
+							{tag}
+						</span>
+					))}
+				</div>
+
+				<a href="/experience" class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">
+					← Return to Experience
+				</a>
+			</footer>
+		</article>
+	</div>
+</Layout>
+
+<style is:global>
+	.prose h1, .prose h2, .prose h3, .prose h4 {
+		font-family: "Playfair Display", serif;
+		font-style: italic;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		margin-top: 2em;
+		margin-bottom: 1em;
+		color: var(--ink);
+	}
+
+	.prose h2 {
+		font-size: 1.75rem;
+	}
+
+	.prose h3 {
+		font-size: 1.5rem;
+	}
+
+	.prose p {
+		margin-bottom: 1.5em;
+	}
+
+	.prose code {
+		font-family: "JetBrains Mono", monospace;
+		font-size: 0.9em;
+		background: var(--bg-secondary);
+		padding: 0.2em 0.4em;
+		border-radius: 4px;
+		color: var(--accent);
+	}
+
+	.prose pre {
+		background: var(--bg-secondary) !important;
+		border: 1px solid var(--line);
+		padding: 2em;
+		border-radius: 0;
+		margin: 2em 0;
+	}
+
+	.prose blockquote {
+		border-left: 2px solid var(--accent);
+		padding-left: 2em;
+		font-style: italic;
+		color: var(--ink-secondary);
+		margin: 2em 0;
+	}
+
+	.prose ul {
+		list-style-type: square;
+		padding-left: 1.5em;
+		margin-bottom: 1.5em;
+	}
+
+	.prose li {
+		margin-bottom: 0.5em;
+	}
+
+	.prose strong {
+		color: var(--ink);
+		font-weight: 600;
+	}
+</style>

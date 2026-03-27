@@ -1,0 +1,105 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import type { Page, GetStaticPathsOptions } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+	const experiences = (await getCollection('experience')).sort(
+		(a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf()
+	);
+	return paginate(experiences, { pageSize: 10 });
+}
+
+interface Props {
+	page: Page<CollectionEntry<'experience'>>;
+}
+
+const { page } = Astro.props;
+---
+
+<Layout title="EXPERIENCE // Portfolio_OS">
+	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
+
+	<div class="relative z-10">
+		<header class="py-20 border-b border-[var(--line)] text-center">
+			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Experience</h1>
+			<p class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">Professional Journey // Page {page.currentPage}</p>
+		</header>
+
+		<section class="py-20">
+			<div class="max-w-4xl mx-auto">
+				{page.data.map((exp) => {
+					const endDate = exp.data.current ? 'Present' : exp.data.endDate?.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+					const startDate = exp.data.startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+					
+					return (
+						<div class="group relative pl-8 md:pl-12 pb-16 border-l border-[var(--line)] last:border-l-0 last:pb-0">
+							<div class="absolute left-0 top-0 w-3 h-3 -translate-x-[7px] rounded-full bg-[var(--bg)] border-2 border-[var(--accent)] group-hover:bg-[var(--accent)] transition-all duration-500"></div>
+							
+							<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
+								<div>
+									<h2 class="text-3xl md:text-4xl font-display font-light tracking-tight text-[var(--ink)] group-hover:italic transition-all">
+										{exp.data.title}
+									</h2>
+									<a href={`/experience/${exp.slug}`} class="text-xl md:text-2xl font-mono text-[var(--accent)] hover:underline transition-colors">
+										@ {exp.data.company}
+									</a>
+								</div>
+								<div class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-muted)] text-right">
+									<p>{startDate} — {endDate}</p>
+									{exp.data.location && <p>{exp.data.location}</p>}
+								</div>
+							</div>
+							
+							<div class="flex flex-wrap gap-2 mb-6">
+								<span class="text-[9px] font-mono uppercase tracking-widest text-[var(--ink-secondary)] border border-[var(--line)] px-2 py-1">
+									{exp.data.type}
+								</span>
+								{exp.data.tags.slice(0, 4).map(tag => (
+									<span class="text-[9px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
+										{tag}
+									</span>
+								))}
+							</div>
+							
+							<p class="text-[16px] text-[var(--ink-secondary)] font-light leading-relaxed mb-6 line-clamp-2">
+								{exp.data.description}
+							</p>
+							
+							<a href={`/experience/${exp.slug}`} class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] group-hover:text-[var(--accent)] transition-colors inline-flex items-center gap-2">
+								View Details <span>→</span>
+							</a>
+						</div>
+					);
+				})}
+			</div>
+		</section>
+
+		{page.lastPage > 1 && (
+			<nav class="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+				{page.url.prev ? (
+					<a href={page.url.prev} class="hover:text-[var(--accent)] transition-colors">← PREV_PAGE</a>
+				) : (
+					<span class="text-[var(--ink-muted)]">← PREV_PAGE</span>
+				)}
+
+				<div class="flex gap-4">
+					{Array.from({ length: page.lastPage }, (_, i) => i + 1).map(num => (
+						<a
+							href={num === 1 ? '/experience' : `/experience/${num}`}
+							class={page.currentPage === num ? 'text-[var(--accent)]' : 'text-[var(--ink-secondary)] hover:text-[var(--ink)]'}
+						>
+							{num.toString().padStart(2, '0')}
+						</a>
+					))}
+				</div>
+
+				{page.url.next ? (
+					<a href={page.url.next} class="hover:text-[var(--accent)] transition-colors">NEXT_PAGE →</a>
+				) : (
+					<span class="text-[var(--ink-muted)]">NEXT_PAGE →</span>
+				)}
+			</nav>
+		)}
+	</div>
+</Layout>

@@ -46,4 +46,20 @@ const about = defineCollection({
 	}),
 });
 
-export const collections = { blog, projects, media, about };
+const experience = defineCollection({
+	type: 'content',
+	schema: z.object({
+		title: z.string(),
+		company: z.string(),
+		description: z.string(),
+		location: z.string().optional(),
+		type: z.enum(['full-time', 'part-time', 'contract', 'internship', 'remote']).default('full-time'),
+		startDate: z.coerce.date(),
+		endDate: z.coerce.date().optional(),
+		current: z.boolean().default(false),
+		heroImage: z.string().optional(),
+		tags: z.array(z.string()).default([]),
+	}),
+});
+
+export const collections = { blog, projects, media, about, experience };

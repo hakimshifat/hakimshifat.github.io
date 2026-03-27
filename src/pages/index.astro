@@ -1,10 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-
-const latestPosts = (await getCollection('blog'))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 3);
 ---
 
 <Layout title="Hakim Shifat Portfolio">
@@ -63,66 +58,6 @@ const latestPosts = (await getCollection('blog'))
 						System_Core_Active // 99.8%
 					</div>
 				</div>
-			</div>
-		</section>
-
-		<!-- Latest Writing Section -->
-		<section class="py-32 border-b border-[var(--line)]">
-			<div class="mb-20">
-				<!-- <span class="font-mono text-[13px] uppercase tracking-wider text-[var(--ink-muted)] block mb-4">FROM THE BLOG</span> -->
-				<h2 class="text-5xl font-display italic font-normal text-[var(--ink)]">Latest writings</h2>
-			</div>
-
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-16">
-				{latestPosts.map((post) => (
-					<article class="flex flex-col gap-8 group">
-						<a href={`/blog/${post.slug}`} class="aspect-video overflow-hidden bg-[var(--bg-secondary)] relative block border border-[var(--line)]">
-							{/* Technical UI Elements */}
-							<div class="absolute inset-0 z-10 pointer-events-none">
-								<div class="absolute top-4 left-4 right-4 h-[1px] bg-[var(--line)]"></div>
-								<div class="absolute top-4 right-4 w-[1px] h-12 bg-[var(--line)]"></div>
-								<div class="absolute top-4 right-4 w-1 h-1 bg-[var(--accent)] rounded-full"></div>
-								<div class="absolute bottom-4 left-4 font-mono text-[11px] text-[var(--ink-muted)] uppercase tracking-wide">
-									{post.slug.toUpperCase()} // 0x{Math.floor(Math.random() * 1000).toString(16)}
-								</div>
-							</div>
-
-							<img
-								src={post.data.heroImage || `https://picsum.photos/seed/${post.slug}/800/450`}
-								alt={post.data.title}
-								class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
-								referrerpolicy="no-referrer"
-							/>
-						</a>
-
-						<div class="flex flex-col gap-4">
-							<div class="flex gap-2 items-center">
-								{post.data.tags.slice(0, 2).map((tag, i) => (
-									<>
-										<span class="font-mono text-[12px] uppercase tracking-wide text-[var(--ink-muted)]">{tag}</span>
-										{i === 0 && post.data.tags.length > 1 && <span class="w-1 h-1 rounded-full bg-[var(--line)]"></span>}
-									</>
-								))}
-							</div>
-							<a href={`/blog/${post.slug}`} class="group-hover:text-[var(--accent)] transition-colors">
-								<h3 class="text-2xl font-display font-normal leading-tight tracking-tight text-[var(--ink)]">{post.data.title}</h3>
-							</a>
-							<p class="text-[16px] text-[var(--ink-secondary)] font-light leading-relaxed line-clamp-3">
-								{post.data.description}
-							</p>
-							<a href={`/blog/${post.slug}`} class="font-mono text-[13px] text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-all">
-								read more ...
-							</a>
-							<div class="mt-2 font-mono text-[13px] text-[var(--ink-muted)] uppercase tracking-wide">
-								{post.data.pubDate.toLocaleDateString('en-US', {
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric',
-								})}
-							</div>
-						</div>
-					</article>
-				))}
 			</div>
 		</section>
 	</div>
