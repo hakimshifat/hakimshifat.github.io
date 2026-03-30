@@ -1,5 +1,5 @@
 ---
-title: "ShibirCTF2025"
+title: "Al Khwarizmi CTF Contest"
 description: "Writeups from ShibirCTF 2025 covering reverse engineering challenges, steganography, and forensics."
 pubDate: "2025-12-16"
 tags: ["ctf", "reverse-engineering", "steganography", "forensics", "writeup"]

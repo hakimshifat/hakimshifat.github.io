@@ -9,6 +9,11 @@ endDate: 2025-03-20 # optional, omit if current
 current: false # set to true if this is your current position
 heroImage: "/images/experience/company-logo.png" # optional
 tags: ["python", "backend", "api", "team-lead"]
+contributionType: 
+projectRepo:
+prLink:
+maintainers:
+impact:
 ---
 
 # Your Job Title @ Company Name

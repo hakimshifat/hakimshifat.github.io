@@ -50,15 +50,24 @@ const experience = defineCollection({
 	type: 'content',
 	schema: z.object({
 		title: z.string(),
-		company: z.string(),
+		company: z.string().optional(), // For open-source: project name
 		description: z.string(),
 		location: z.string().optional(),
-		type: z.enum(['full-time', 'part-time', 'contract', 'internship', 'remote']).default('full-time'),
+		// type: z.enum(['full-time', 'part-time', 'contract', 'internship', 'open-source', 'freelance', 'research', ' ']).default(' '),
+		type: z.string().optional(),
 		startDate: z.coerce.date(),
 		endDate: z.coerce.date().optional(),
 		current: z.boolean().default(false),
 		heroImage: z.string().optional(),
 		tags: z.array(z.string()).default([]),
+		// Open-source contribution specific fields
+		// contributionType: z.enum(['merge-request', 'pull-request', 'issue', 'documentation', 'bug-report', 'code-review', 'maintenance', 'feature', ' ']).default(' '),
+		contributionType: z.string().optional(),
+		projectRepo: z.string().optional(), // GitHub/GitLab repo URL
+		prLink: z.string().optional(), // Specific PR/MR link
+		prNumber: z.string().optional(), // PR/MR number for display
+		maintainers: z.array(z.string()).optional(), // Maintainers you worked with
+		impact: z.string().optional(), // Brief impact statement (e.g., "Merged upstream", "500+ downloads")
 	}),
 });
 
