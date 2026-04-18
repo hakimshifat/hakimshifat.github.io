@@ -21,15 +21,15 @@ const { Content } = await entry.render();
 			<div class="flex flex-col md:flex-row gap-12 items-end justify-between">
 				<div class="flex flex-col gap-4">
 					<div class="flex items-center gap-4">
-						<span class="font-mono text-[11px] uppercase tracking-widest text-[var(--accent)]">{entry.data.category}</span>
+						<span class="font-mono text-sm uppercase tracking-widest text-[var(--accent)]">{entry.data.category}</span>
 						<span class="w-8 h-[1px] bg-[var(--line)]"></span>
-						<span class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-muted)]">{entry.data.year}</span>
+						<span class="font-mono text-sm uppercase tracking-widest text-[var(--ink-muted)]">{entry.data.year}</span>
 					</div>
 					<h1 class="text-6xl md:text-8xl font-display italic tracking-tighter text-[var(--ink)]">{entry.data.title}</h1>
 				</div>
 				{entry.data.rating && (
 					<div class="flex flex-col items-end">
-						<span class="font-mono text-[10px] uppercase tracking-widest text-[var(--ink-muted)] mb-2">SYSTEM_RATING</span>
+						<span class="font-mono text-sm uppercase tracking-widest text-[var(--ink-muted)] mb-2">SYSTEM_RATING</span>
 						<span class="text-4xl font-display italic text-[var(--accent)]">{entry.data.rating}/10</span>
 					</div>
 				)}
@@ -46,7 +46,7 @@ const { Content } = await entry.render();
 						referrerpolicy="no-referrer"
 					/>
 				</div>
-				<div class="mt-8 flex flex-col gap-4 font-mono text-[11px] uppercase tracking-widest text-[var(--ink-muted)]">
+				<div class="mt-8 flex flex-col gap-4 font-mono text-sm uppercase tracking-widest text-[var(--ink-muted)]">
 					<div class="flex justify-between border-b border-[var(--line)] pb-2">
 						<span>RECORD_ID</span>
 						<span>0x{entry.slug.toUpperCase()}</span>
@@ -70,7 +70,7 @@ const { Content } = await entry.render();
 				</div>
 
 				<div class="mt-20 pt-12 border-t border-[var(--line)]">
-					<a href="/media" class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">
+					<a href="/media" class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">
 						← RETURN_TO_ARCHIVE
 					</a>
 				</div>

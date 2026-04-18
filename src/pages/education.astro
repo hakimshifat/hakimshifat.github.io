@@ -39,7 +39,7 @@ const education = [
 	<div class="relative z-10">
 		<header class="py-20 border-b border-[var(--line)] text-center">
 			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Education</h1>
-			<p class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">Academic Records</p>
+			<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">Academic Records</p>
 		</header>
 
 		<section class="py-20">
@@ -53,9 +53,9 @@ const education = [
 						<div class={`w-full md:w-1/2 ${index % 2 === 0 ? 'md:pr-16 md:text-right' : 'md:pl-16 md:text-left'} flex flex-col items-center ${index % 2 === 0 ? 'md:items-end' : 'md:items-start'} mb-8 md:mb-0`}>
 							<div class="flex flex-col gap-4">
 								<div class={`flex items-center gap-4 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-									<span class="font-mono text-[11px] uppercase tracking-widest text-[var(--accent)]">{item.year}</span>
+									<span class="font-mono text-sm uppercase tracking-widest text-[var(--accent)]">{item.year}</span>
 									<span class="w-8 h-[1px] bg-[var(--line)]"></span>
-									<span class="font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--ink-muted)]">{item.status}</span>
+									<span class="font-mono text-xs uppercase tracking-[0.2em] text-[var(--ink-muted)]">{item.status}</span>
 								</div>
 
 								<div>
@@ -89,16 +89,16 @@ const education = [
 		<section class="py-20 border-t border-[var(--line)]">
 			<div class="flex flex-col md:flex-row justify-between items-start gap-12">
 				<div class="max-w-md">
-					<h3 class="font-mono text-[14px] uppercase tracking-widest text-[var(--ink-secondary)] mb-6">Continuous Learning</h3>
+					<h3 class="font-mono text-base uppercase tracking-widest text-[var(--ink-secondary)] mb-6">Continuous Learning</h3>
 					<p class="text-sm font-light text-[var(--ink-secondary)] leading-relaxed">
 						Actively participating in open-source research and specialized technical workshops to maintain system edge.
 					</p>
 				</div>
 				<div class="grid grid-cols-2 gap-x-12 gap-y-4">
-					<span class="font-mono text-[12px] uppercase text-[var(--ink-muted)]">Distributed Systems</span>
-					<span class="font-mono text-[12px] uppercase text-[var(--ink-muted)]">Type Theory</span>
-					<span class="font-mono text-[12px] uppercase text-[var(--ink-muted)]">Generative UI</span>
-					<span class="font-mono text-[12px] uppercase text-[var(--ink-muted)]">Performance Opt</span>
+					<span class="font-mono text-base uppercase text-[var(--ink-muted)]">Distributed Systems</span>
+					<span class="font-mono text-base uppercase text-[var(--ink-muted)]">Type Theory</span>
+					<span class="font-mono text-base uppercase text-[var(--ink-muted)]">Generative UI</span>
+					<span class="font-mono text-base uppercase text-[var(--ink-muted)]">Performance Opt</span>
 				</div>
 			</div>
 		</section>

@@ -28,12 +28,12 @@ const media = defineCollection({
 	type: 'content',
 	schema: z.object({
 		title: z.string(),
-		category: z.enum(['movie', 'series', 'anime', 'book']),
+		category: z.string().optional(),
 		image: z.string(),
 		rating: z.string().optional(),
 		year: z.string().optional(),
 		status: z.string().optional(),
-		pubDate: z.coerce.date(),
+		pubDate: z.coerce.date().optional(),
 	}),
 });
 

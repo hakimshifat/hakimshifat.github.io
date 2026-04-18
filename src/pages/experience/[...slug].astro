@@ -22,7 +22,7 @@ const { Content } = await experience.render();
 			<header class="mb-16">
 				<div class="flex items-center gap-4 mb-6">
 					<div class="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
-					<span class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+					<span class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">
 						{experience.data.startDate.toLocaleDateString('en-US', {
 							year: 'numeric',
 							month: 'long',
@@ -44,15 +44,15 @@ const { Content } = await experience.render();
 				</a>
 				<div class="flex flex-wrap gap-3 mt-8">
 					{experience.data.location && (
-						<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-3 py-1">
+						<span class="text-sm font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-3 py-1">
 							📍 {experience.data.location}
 						</span>
 					)}
-					<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-secondary)] border border-[var(--line)] px-3 py-1">
+					<span class="text-sm font-mono uppercase tracking-widest text-[var(--ink-secondary)] border border-[var(--line)] px-3 py-1">
 						{experience.data.type}
 					</span>
 					{experience.data.current && (
-						<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--accent)] border border-[var(--accent)] px-3 py-1">
+						<span class="text-sm font-mono uppercase tracking-widest text-[var(--accent)] border border-[var(--accent)] px-3 py-1">
 							CURRENT
 						</span>
 					)}
@@ -77,13 +77,13 @@ const { Content } = await experience.render();
 			<footer class="mt-20 pt-12 border-t border-[var(--line)]">
 				<div class="flex flex-wrap gap-3 mb-12">
 					{experience.data.tags.map((tag) => (
-						<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-3 py-1">
+						<span class="text-sm font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-3 py-1">
 							{tag}
 						</span>
 					))}
 				</div>
 
-				<a href="/experience" class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">
+				<a href="/experience" class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">
 					← Return to Experience
 				</a>
 			</footer>

@@ -804,7 +804,7 @@ const Terminal = () => {
                   <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
                   <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
                 </div>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--accent)]/80">
+                <span className="font-mono text-sm uppercase tracking-widest text-[var(--accent)]/80">
                   ghostty — sifat@arch
                 </span>
               </div>
@@ -820,7 +820,7 @@ const Terminal = () => {
             <div
               ref={scrollRef}
               onClick={() => inputRef.current?.focus()}
-              className="flex-1 p-4 font-mono text-[11px] overflow-y-auto cursor-text leading-relaxed"
+              className="flex-1 p-4 font-mono text-sm overflow-y-auto cursor-text leading-relaxed"
               style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(0,255,0,0.2) transparent' }}
             >
               {history.map((line, i) => {

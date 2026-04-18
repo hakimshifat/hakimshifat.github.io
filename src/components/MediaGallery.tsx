@@ -52,7 +52,7 @@ const MediaGallery: React.FC<Props> = ({ media }) => {
           <button
             key={cat.id}
             onClick={() => setActiveTab(cat.id)}
-            className={`font-mono text-[11px] uppercase tracking-widest transition-all ${
+            className={`font-mono text-sm uppercase tracking-widest transition-all ${
               activeTab === cat.id
                 ? 'text-[var(--accent)]'
                 : 'text-[var(--ink-muted)] hover:text-[var(--ink)]'
@@ -81,11 +81,11 @@ const MediaGallery: React.FC<Props> = ({ media }) => {
             {/* Overlay Info */}
             <div className="absolute inset-0 p-6 flex flex-col justify-between bg-gradient-to-t from-[var(--bg)] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
               <div className="flex justify-between items-start">
-                <span className="font-mono text-[9px] uppercase tracking-widest text-[var(--ink-muted)] bg-[var(--bg)]/80 px-2 py-1 border border-[var(--line)]">
+                <span className="font-mono text-xs uppercase tracking-widest text-[var(--ink-muted)] bg-[var(--bg)]/80 px-2 py-1 border border-[var(--line)]">
                   {item.data.category}
                 </span>
                 {item.data.rating && (
-                  <span className="font-mono text-[9px] text-[var(--accent)] bg-[var(--bg)]/80 px-2 py-1 border border-[var(--accent)]/20">
+                  <span className="font-mono text-xs text-[var(--accent)] bg-[var(--bg)]/80 px-2 py-1 border border-[var(--accent)]/20">
                     {item.data.rating}/10
                   </span>
                 )}
@@ -93,7 +93,7 @@ const MediaGallery: React.FC<Props> = ({ media }) => {
 
               <div className="flex flex-col gap-2">
                 <h3 className="text-xl font-display italic leading-tight text-[var(--ink)]">{item.data.title}</h3>
-                <div className="flex justify-between items-center font-mono text-[9px] text-[var(--ink-muted)] uppercase tracking-widest">
+                <div className="flex justify-between items-center font-mono text-xs text-[var(--ink-muted)] uppercase tracking-widest">
                   <span>{item.data.year}</span>
                   {item.data.status && <span>{item.data.status}</span>}
                 </div>
@@ -101,7 +101,7 @@ const MediaGallery: React.FC<Props> = ({ media }) => {
             </div>
 
             {/* Static Label */}
-            <div className="absolute top-4 right-4 font-mono text-[8px] text-[var(--ink-muted)] group-hover:opacity-0 transition-opacity">
+            <div className="absolute top-4 right-4 font-mono text-xs text-[var(--ink-muted)] group-hover:opacity-0 transition-opacity">
               ID_{item.slug.toUpperCase()}
             </div>
           </a>
@@ -115,7 +115,7 @@ const MediaGallery: React.FC<Props> = ({ media }) => {
       )}
 
       {totalPages > 1 && (
-        <nav className="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+        <nav className="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">
           <button
             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             disabled={currentPage === 1}

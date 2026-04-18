@@ -63,7 +63,7 @@ const getContributionIcon = (contributionType: string) => {
 	<div class="relative z-10">
 		<header class="py-20 border-b border-[var(--line)] text-center">
 			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Experience</h1>
-			<p class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">Professional Journey // Page {page.currentPage}</p>
+			<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">Professional Journey // Page {page.currentPage}</p>
 		</header>
 
 		<section class="py-20">
@@ -90,33 +90,33 @@ const getContributionIcon = (contributionType: string) => {
 										</a>
 									)}
 								</div>
-								<div class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-muted)] text-right">
+								<div class="font-mono text-sm uppercase tracking-widest text-[var(--ink-muted)] text-right">
 									<p>{startDate} — {endDate}</p>
 									{exp.data.location && <p>{exp.data.location}</p>}
 								</div>
 							</div>
 
 							<div class="flex flex-wrap gap-2 mb-6">
-								<span class={`text-[9px] font-mono uppercase tracking-widest px-2 py-1 ${getTypeBadgeClass(exp.data.type)}`}>
+								<span class={`text-xs font-mono uppercase tracking-widest px-2 py-1 ${getTypeBadgeClass(exp.data.type)}`}>
 									{exp.data.type === ' ' ? 'EXPERIENCE' : exp.data.type}
 								</span>
 								{isContribution && exp.data.contributionType !== ' ' && (
-									<span class="text-[9px] font-mono uppercase tracking-widest text-[var(--accent)] border border-[var(--accent)] px-2 py-1">
+									<span class="text-xs font-mono uppercase tracking-widest text-[var(--accent)] border border-[var(--accent)] px-2 py-1">
 										{getContributionIcon(exp.data.contributionType)} {exp.data.contributionType}
 									</span>
 								)}
 								{exp.data.prNumber && (
-									<span class="text-[9px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
+									<span class="text-xs font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
 										#{exp.data.prNumber}
 									</span>
 								)}
 								{exp.data.impact && (
-									<span class="text-[8px] font-mono uppercase tracking-widest text-[#10B981] border border-[#10B981] px-2 py-1">
+									<span class="text-xs font-mono uppercase tracking-widest text-[#10B981] border border-[#10B981] px-2 py-1">
 										✓ {exp.data.impact}
 									</span>
 								)}
 								{exp.data.tags.slice(0, 3).map(tag => (
-									<span class="text-[9px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
+									<span class="text-xs font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
 										{tag}
 									</span>
 								))}
@@ -127,12 +127,12 @@ const getContributionIcon = (contributionType: string) => {
 							</p>
 
 							{exp.data.maintainers && exp.data.maintainers.length > 0 && (
-								<p class="text-[14px] text-[var(--ink-muted)] font-mono mb-4">
+								<p class="text-base text-[var(--ink-muted)] font-mono mb-4">
 									Maintainers: <span class="text-[var(--ink-secondary)]">{exp.data.maintainers.join(', ')}</span>
 								</p>
 							)}
 
-							<a href={`/experience/${exp.slug}`} class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] group-hover:text-[var(--accent)] transition-colors inline-flex items-center gap-2">
+							<a href={`/experience/${exp.slug}`} class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)] group-hover:text-[var(--accent)] transition-colors inline-flex items-center gap-2">
 								View Details <span>→</span>
 							</a>
 						</div>
@@ -142,7 +142,7 @@ const getContributionIcon = (contributionType: string) => {
 		</section>
 
 		{page.lastPage > 1 && (
-			<nav class="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+			<nav class="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">
 				{page.url.prev ? (
 					<a href={page.url.prev} class="hover:text-[var(--accent)] transition-colors">← PREV_PAGE</a>
 				) : (

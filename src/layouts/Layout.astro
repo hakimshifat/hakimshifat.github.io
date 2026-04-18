@@ -27,10 +27,10 @@ const { title, description = "Just Something" } = Astro.props;
 
 		<header class="fixed top-0 left-0 right-0 z-40 bg-[var(--bg)]/95 backdrop-blur-md border-b border-[var(--line)]">
 			<nav class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-				<a href="/" class="font-mono text-[14px] tracking-tight font-medium text-[var(--ink)] hover:text-[var(--accent)] transition-colors">PORTFOLIO_OS.v1</a>
+				<a href="/" class="font-mono text-base tracking-tight font-medium text-[var(--ink)] hover:text-[var(--accent)] transition-colors">PORTFOLIO_OS.v1</a>
 				<div class="flex items-center gap-4">
 					<!-- Desktop Navigation -->
-					<div class="hidden md:flex gap-8 text-[14px] uppercase tracking-wide font-medium text-[var(--ink-secondary)]">
+					<div class="hidden md:flex gap-8 text-base uppercase tracking-wide font-medium text-[var(--ink-secondary)]">
 						<a href="/blog" class="text-[var(--ink-secondary)] hover:text-[var(--ink)] hover:text-[var(--accent)] transition-colors">Archive</a>
 						<a href="/experience" class="text-[var(--ink-secondary)] hover:text-[var(--ink)] hover:text-[var(--accent)] transition-colors">Experience</a>
 						<a href="/projects" class="text-[var(--ink-secondary)] hover:text-[var(--ink)] hover:text-[var(--accent)] transition-colors">Projects</a>
@@ -59,7 +59,7 @@ const { title, description = "Just Something" } = Astro.props;
 			<div class="absolute inset-0 bg-[var(--bg)]/95 backdrop-blur-md transition-opacity" id="mobile-nav-overlay"></div>
 			<div class="absolute top-0 right-0 h-full w-64 bg-[var(--bg)] border-l border-[var(--line)] shadow-lg transform transition-transform duration-300 ease-out" id="mobile-nav-drawer">
 				<div class="flex flex-col h-full pt-20 px-6">
-					<nav class="flex flex-col gap-4 text-[14px] uppercase tracking-wide font-medium">
+					<nav class="flex flex-col gap-4 text-base uppercase tracking-wide font-medium">
 						<a href="/blog" class="mobile-nav-link text-[var(--ink-secondary)] hover:text-[var(--ink)] hover:text-[var(--accent)] transition-colors py-2">Archive</a>
 						<a href="/experience" class="mobile-nav-link text-[var(--ink-secondary)] hover:text-[var(--ink)] hover:text-[var(--accent)] transition-colors py-2">Experience</a>
 						<a href="/projects" class="mobile-nav-link text-[var(--ink-secondary)] hover:text-[var(--ink)] hover:text-[var(--accent)] transition-colors py-2">Projects</a>
@@ -81,15 +81,15 @@ const { title, description = "Just Something" } = Astro.props;
 		<footer class="border-t border-[var(--line)] py-12 px-4 sm:px-6 max-w-7xl mx-auto">
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
 				<div>
-					<p class="font-mono text-[13px] uppercase tracking-wider text-[var(--ink-muted)] font-medium mb-4">System Status</p>
+					<p class="font-mono text-base uppercase tracking-wider text-[var(--ink-muted)] font-medium mb-4">System Status</p>
 					<div class="flex items-center gap-2">
 						<div class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></div>
-						<span class="text-[14px] font-mono text-[var(--ink-secondary)]">OPERATIONAL // 2026.03.20</span>
+						<span class="text-base font-mono text-[var(--ink-secondary)]">OPERATIONAL // 2026.03.20</span>
 					</div>
 				</div>
 				<div>
-					<p class="font-mono text-[13px] uppercase tracking-wider text-[var(--ink-muted)] font-medium mb-4">Navigation</p>
-					<div class="flex flex-col gap-2 text-[14px] font-mono">
+					<p class="font-mono text-base uppercase tracking-wider text-[var(--ink-muted)] font-medium mb-4">Navigation</p>
+					<div class="flex flex-col gap-2 text-base font-mono">
 						<a href="/" class="text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
 						<a href="/blog" class="text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">Archive</a>
 						<a href="/experience" class="text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">Experience</a>
@@ -97,14 +97,14 @@ const { title, description = "Just Something" } = Astro.props;
 					</div>
 				</div>
 				<div class="text-right md:text-left">
-					<p class="font-mono text-[13px] uppercase tracking-wider text-[var(--ink-muted)] font-medium mb-4">Connect</p>
-					<div class="flex gap-4 text-[14px] font-mono justify-end md:justify-start">
+					<p class="font-mono text-base uppercase tracking-wider text-[var(--ink-muted)] font-medium mb-4">Connect</p>
+					<div class="flex gap-4 text-base font-mono justify-end md:justify-start">
 						<a href="https://github.com/hakimshifat" target="_blank" rel="noopener noreferrer" class="text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">GitHub</a>
 						<a href="https://linkedin.com/in/hakimshifat" target="_blank" rel="noopener noreferrer" class="text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">LinkedIn</a>
 					</div>
 				</div>
 			</div>
-			<div class="mt-8 md:mt-12 pt-8 border-t border-[var(--line)] flex flex-col md:flex-row justify-between items-center gap-4 text-[13px] font-mono text-[var(--ink-muted)]">
+			<div class="mt-8 md:mt-12 pt-8 border-t border-[var(--line)] flex flex-col md:flex-row justify-between items-center gap-4 text-base font-mono text-[var(--ink-muted)]">
 				<p>© 2026 PORTFOLIO_OS</p>
 				<p>DESIGNED FOR THE VOID</p>
 			</div>
@@ -233,7 +233,7 @@ const { title, description = "Just Something" } = Astro.props;
 			/* Headings: Clear hierarchy with proper spacing */
 
 			.text-meta {
-				font-size: 0.8125rem;
+				font-size: 0.875rem;
 				line-height: 1.5;
 				letter-spacing: 0.05em;
 			}
@@ -273,7 +273,7 @@ const { title, description = "Just Something" } = Astro.props;
 			/* Mobile-specific responsive adjustments */
 			@media (max-width: 768px) {
 				html {
-					font-size: 15px;
+					font-size: 16px;
 				}
 				.prose h1 {
 					font-size: 2rem;

@@ -22,7 +22,7 @@ const { Content } = await post.render();
 			<header class="mb-20">
 				<div class="flex items-center gap-4 mb-8">
 					<div class="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></div>
-					<span class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+					<span class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">
 						{post.data.pubDate.toLocaleDateString('en-US', {
 							year: 'numeric',
 							month: 'long',
@@ -45,12 +45,12 @@ const { Content } = await post.render();
 			<footer class="mt-20 pt-12 border-t border-[var(--line)]">
 				<div class="flex flex-wrap gap-4 mb-12">
 					{post.data.tags.map((tag) => (
-						<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
+						<span class="text-sm font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
 							{tag}
 						</span>
 					))}
 				</div>
-				<a href="/blog" class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">
+				<a href="/blog" class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)] hover:text-[var(--accent)] transition-colors">
 					← Return to Archive
 				</a>
 			</footer>

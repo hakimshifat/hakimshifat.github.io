@@ -23,7 +23,7 @@ const { page } = Astro.props;
 	<div class="relative z-10">
 		<header class="py-20 border-b border-[var(--line)] text-center">
 			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Projects</h1>
-			<p class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">System Output: ACTIVE_DEVELOPMENT // Page {page.currentPage}</p>
+			<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">System Output: ACTIVE_DEVELOPMENT // Page {page.currentPage}</p>
 		</header>
 
 		<section class="py-20 grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -36,7 +36,7 @@ const { page } = Astro.props;
 							class="w-full h-full object-cover group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
 							referrerpolicy="no-referrer"
 						/>
-						<div class="absolute top-6 left-6 font-mono text-[10px] text-[var(--ink-muted)] bg-[var(--bg)]/60 backdrop-blur-sm px-2 py-1 border border-[var(--line)]">
+						<div class="absolute top-6 left-6 font-mono text-sm text-[var(--ink-muted)] bg-[var(--bg)]/60 backdrop-blur-sm px-2 py-1 border border-[var(--line)]">
 							0{((page.currentPage - 1) * 10) + index + 1} // PROJECT
 						</div>
 					</div>
@@ -47,10 +47,10 @@ const { page } = Astro.props;
 						</p>
 						<div class="flex flex-wrap gap-4 mb-12">
 							{project.data.tags.map(tag => (
-								<span class="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">{tag}</span>
+								<span class="text-sm font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">{tag}</span>
 							))}
 						</div>
-						<a href={`/projects/${project.slug}`} class="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)] group-hover:text-[var(--accent)] transition-colors">
+						<a href={`/projects/${project.slug}`} class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)] group-hover:text-[var(--accent)] transition-colors">
 							View Documentation →
 						</a>
 					</div>
@@ -59,7 +59,7 @@ const { page } = Astro.props;
 		</section>
 
 		{page.lastPage > 1 && (
-			<nav class="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+			<nav class="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">
 				{page.url.prev ? (
 					<a href={page.url.prev} class="hover:text-[var(--accent)] transition-colors">← PREV_PAGE</a>
 				) : (

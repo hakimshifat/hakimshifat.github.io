@@ -55,7 +55,7 @@ const BlogSearch: React.FC<Props> = ({ posts }) => {
           onChange={(e) => setQuery(e.target.value)}
           className="w-full bg-transparent border-b border-[var(--line)] py-4 font-mono text-sm uppercase tracking-widest focus:outline-none focus:border-[var(--accent)] transition-colors placeholder:text-[var(--ink-muted)] text-[var(--ink)]"
         />
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 font-mono text-[10px] text-[var(--ink-muted)]">
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 font-mono text-sm text-[var(--ink-muted)]">
           {filteredPosts.length} / {posts.length} RECORDS_FOUND
         </div>
       </div>
@@ -77,7 +77,7 @@ const BlogSearch: React.FC<Props> = ({ posts }) => {
                   </a>
                 </div>
                 <div className="w-full lg:w-2/3">
-                  <div className="font-mono text-[11px] uppercase tracking-widest text-[var(--ink-muted)] mb-4">
+                  <div className="font-mono text-sm uppercase tracking-widest text-[var(--ink-muted)] mb-4">
                     {new Date(post.data.pubDate).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'short',
@@ -90,7 +90,7 @@ const BlogSearch: React.FC<Props> = ({ posts }) => {
                   <p className="text-lg text-[var(--ink-secondary)] font-light mb-6 max-w-2xl line-clamp-2">{post.data.description}</p>
                   <div className="flex gap-4">
                     {post.data.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
+                      <span key={tag} className="text-sm font-mono uppercase tracking-widest text-[var(--ink-muted)] border border-[var(--line)] px-2 py-1">
                         {tag}
                       </span>
                     ))}
@@ -107,7 +107,7 @@ const BlogSearch: React.FC<Props> = ({ posts }) => {
       </div>
 
       {totalPages > 1 && (
-        <nav className="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-[11px] uppercase tracking-widest text-[var(--ink-secondary)]">
+        <nav className="py-20 border-t border-[var(--line)] flex justify-between items-center font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">
           <button
             onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
             disabled={currentPage === 1}

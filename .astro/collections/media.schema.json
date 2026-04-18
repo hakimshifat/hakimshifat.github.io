@@ -8,13 +8,7 @@
           "type": "string"
         },
         "category": {
-          "type": "string",
-          "enum": [
-            "movie",
-            "series",
-            "anime",
-            "book"
-          ]
+          "type": "string"
         },
         "image": {
           "type": "string"
@@ -50,9 +44,7 @@
       },
       "required": [
         "title",
-        "category",
-        "image",
-        "pubDate"
+        "image"
       ],
       "additionalProperties": false
     }
