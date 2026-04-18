@@ -24,4 +24,5 @@ Watched the movie based on *Kichukkhon* by Humayun Ahmed. It captures the essenc
 
 ## When I Watched It
 
-Watched in December 2024. A touching story that stays with you.
+Watched recently in this march of 2026. A touching story that stays with you.
+Gonna read the book soon when i forget the movie.

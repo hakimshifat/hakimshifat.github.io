@@ -24,4 +24,4 @@ Raskolnikov's descent into guilt and redemption—a psychological exploration of
 
 ## When I Read It
 
-Finished in December 2024. A truly profound reading experience.
+Finished in December 2025. A truly profound reading experience.

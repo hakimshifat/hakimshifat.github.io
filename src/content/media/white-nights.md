@@ -24,4 +24,4 @@ A beautiful reminder that intensity can come from pacing as much as plot. Dostoe
 
 ## When I Read It
 
-December 2024. A short but powerful read.
+Somewhere 2025. Suggested by a friend. A short but powerful read.
