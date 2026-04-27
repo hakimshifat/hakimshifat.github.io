@@ -1,48 +1,26 @@
 ---
-title: "Project_Name"
-description: "A brief description of your project (appears in project cards)"
-pubDate: "2026-03-21"
-tags: ["technology1", "technology2", "technology3"]
-heroImage: "/media/project-image.png"  # Path should be relative to /public folder
-link: "https://github.com/yourusername/project"  # Optional: link to project
+title: "Project Name"
+description: "A short 1-2 sentence description of the project."
+pubDate: "YYYY-MM-DD"
+# heroImage: "/images/projects/placeholder.png"
+tags: ["Tech1", "Tech2", "Concept1"]
+# link: "https://github.com/yourusername/repo"
 ---
 
-# Project_Name
+# Project Name
 
-Describe your project here.
+A detailed overview of what the project is, the problem it solves, and why you built it.
 
-## Overview
+## Key Features
 
-What is this project about? What problem does it solve?
-
-## Features
-
-- Feature 1
-- Feature 2
-- Feature 3
+- **Feature 1:** Detailed description of what this feature does.
+- **Feature 2:** Detailed description of what this feature does.
 
 ## Technologies Used
 
-- Technology 1
-- Technology 2
+- **Tech 1** - Reason it was used
+- **Tech 2** - Reason it was used
 
-## Screenshots
+## Challenges / Learnings
 
-![](/media/screenshot.png)
-
-## Installation
-
-```bash
-# Installation instructions
-git clone https://github.com/yourusername/project.git
-cd project
-npm install
-```
-
-## Usage
-
-How to use this project.
-
-## License
-
-MIT License or your choice.
+Briefly describe any technical hurdles you overcame while building this.

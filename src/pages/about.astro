@@ -53,7 +53,28 @@ const whatIDoCards = [
 ];
 
 const skills = [
-	"Linux/Unix", "Bash Scripting", "Python", "Node.js", "Web Security", "CTF", "Git", "Docker"];
+	"C", "C++", "Python", "Java", "JavaScript", "HTML5", "CSS3", "SQL",
+	"IDA", "Burpsuite", "Wireshark",
+	"Linux", "Git", "VS Code", "Docker"
+];
+
+const certifications = [
+	{
+		title: "Certified Red Team Operations Management (CRTOM)",
+		issuer: "Red Team Leaders",
+		date: "Dec 2025"
+	},
+	{
+		title: "Problem Solving (Intermediate)",
+		issuer: "HackerRank",
+		date: "Jan 2025"
+	},
+	{
+		title: "Linux 100",
+		issuer: "TCM Security",
+		date: "Dec 2024"
+	}
+];
 ---
 
 <Layout title="ABOUT // Portfolio_OS">
@@ -61,7 +82,7 @@ const skills = [
 
 	<div class="relative z-10 max-w-5xl mx-auto">
 		<header class="py-20 text-center">
-			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">About</h1>
+			<h1 class="text-6xl md:text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4 typing-effect">About</h1>
 			<p class="font-mono text-sm uppercase tracking-[0.4em] text-[var(--ink-muted)]">Get to know me better</p>
 			<div class="w-full h-[1px] bg-[var(--line)] mt-12"></div>
 		</header>
@@ -80,7 +101,7 @@ const skills = [
 					<div class="p-8 border border-[var(--line)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-all duration-500 group">
 						<div class="flex items-center gap-4 mb-6">
 							<span class="text-2xl">{card.emoji}</span>
-							<h3 class="text-2xl font-display italic text-[var(--ink)]">{card.title}</h3>
+							<h3 class="text-2xl font-display italic text-[var(--ink)] typing-effect">{card.title}</h3>
 						</div>
 						<p class="text-lg font-light text-[var(--ink-secondary)] leading-relaxed group-hover:text-[var(--ink)] transition-colors">
 							{card.description}
@@ -90,6 +111,23 @@ const skills = [
 			</div>
 		</section>
 
+
+		<section class="py-20">
+			<h2 class="text-3xl font-display italic text-[var(--accent)] mb-12">Certifications</h2>
+			<div class="grid grid-cols-1 gap-4">
+				{certifications.map((cert) => (
+					<div class="p-6 border border-[var(--line)] bg-[var(--bg-secondary)] hover:border-[var(--accent)] transition-all flex flex-col md:flex-row justify-between items-start md:items-center">
+						<div>
+							<h3 class="text-xl font-display text-[var(--ink)] mb-1">{cert.title}</h3>
+							<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">{cert.issuer}</p>
+						</div>
+						<div class="font-mono text-sm text-[var(--accent)] mt-4 md:mt-0 px-3 py-1 border border-[var(--line)] bg-[var(--bg)]">
+							{cert.date}
+						</div>
+					</div>
+				))}
+			</div>
+		</section>
 
 		<section class="py-20">
 			<h2 class="text-3xl font-display italic text-[var(--accent)] mb-12">Skills & Technologies</h2>

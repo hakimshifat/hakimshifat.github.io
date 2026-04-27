@@ -22,7 +22,7 @@ const { page } = Astro.props;
 
 	<div class="relative z-10">
 		<header class="py-20 border-b border-[var(--line)] text-center">
-			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Projects</h1>
+			<h1 class="text-6xl md:text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4 typing-effect">Projects</h1>
 			<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">System Output: ACTIVE_DEVELOPMENT // Page {page.currentPage}</p>
 		</header>
 
@@ -41,7 +41,7 @@ const { page } = Astro.props;
 						</div>
 					</div>
 					<div class="p-12 flex-1 flex flex-col">
-						<h2 class="text-5xl font-display mb-6 group-hover:italic transition-all text-[var(--ink)]">{project.data.title}</h2>
+						<h2 class="text-5xl font-display mb-6 group-hover:italic transition-all text-[var(--ink)] typing-effect">{project.data.title}</h2>
 						<p class="text-lg text-[var(--ink-secondary)] font-light mb-12 leading-relaxed flex-1">
 							{project.data.description}
 						</p>

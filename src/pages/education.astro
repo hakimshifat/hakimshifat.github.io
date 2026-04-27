@@ -3,31 +3,24 @@ import Layout from '../layouts/Layout.astro';
 
 const education = [
 	{
-		year: "2023 - ",
-		title: "Bsc in Computer Science and Engineering",
-		institution: "Bangladesh University of Professionals(BUP)",
-		description: "Somehow Surviving",
+		year: "Jun 2023 - Jul 2027",
+		title: "Bachelor of Computer Science and Engineering",
+		institution: "Bangladesh University of Professionals (BUP)",
+		description: "CGPA: 3.45 / 4.00 (up to 5th semester)",
 		status: "Ongoing"
 	},
-{
-		year: "2020-21",
-		title: "Higher Secondary School Certificate(HSC)",
-		institution: "Nawab Faizunnessa Govt. College",
-		description: "After first 6 months of offline class, COVID-19 happened and all went to online",
-		status: "(somehow)COMPLETED"
-	},
 	{
-		year: "2014 - 2019",
-		title: "Secondary School Certificate(SSC)",
-		institution: "Kakirtala High School",
-		description: "Also did JSC",
+		year: "2019 - 2021",
+		title: "Higher Secondary Certificate (HSC)",
+		institution: "Nawab Fayzunnesa Govt. College",
+		description: "GPA: 5.00 / 5.00 | Group: Science",
 		status: "COMPLETED"
 	},
 	{
-		year: "2008 - 2013",
-		title: "Class 1 - Class 5",
-		institution: "Kadaba Govt. Primary School",
-		description: "Did PSC",
+		year: "2014 - 2019",
+		title: "Secondary School Certificate (SSC)",
+		institution: "Kakirtala High School",
+		description: "GPA: 4.89 / 5.00 | Group: Science",
 		status: "COMPLETED"
 	}
 ];
@@ -38,7 +31,7 @@ const education = [
 
 	<div class="relative z-10">
 		<header class="py-20 border-b border-[var(--line)] text-center">
-			<h1 class="text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4">Education</h1>
+			<h1 class="text-6xl md:text-7xl font-display italic tracking-tighter text-[var(--ink)] mb-4 typing-effect">Education</h1>
 			<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">Academic Records</p>
 		</header>
 
@@ -59,7 +52,7 @@ const education = [
 								</div>
 
 								<div>
-									<h2 class="text-4xl font-display italic mb-2 text-[var(--ink)]">{item.title}</h2>
+									<h2 class="text-4xl font-display italic mb-2 text-[var(--ink)] typing-effect">{item.title}</h2>
 									<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)] mb-6">@ {item.institution}</p>
 									<p class="text-lg font-light text-[var(--ink-secondary)] leading-relaxed max-w-2xl">
 										{item.description}
