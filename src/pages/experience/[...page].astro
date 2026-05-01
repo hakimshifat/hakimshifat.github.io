@@ -89,7 +89,7 @@ const getContributionIcon = (contributionType: string) => {
 										{displayTitle}
 									</h2>
 									{displayCompany && (
-										<a href={exp.data.projectRepo || `/experience/${exp.slug}`} class="text-xl md:text-2xl font-mono text-[var(--accent)] hover:underline transition-colors relative z-20 inline-block">
+										<a href={exp.data.projectRepo || `/experience/${exp.slug}`} class="text-xl md:text-2xl font-mono text-[var(--accent)] hover:underline transition-colors relative z-20 inline-block break-all">
 											@ {displayCompany}
 										</a>
 									)}

@@ -14,7 +14,7 @@ const { title, description = "Just Something" } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
@@ -24,7 +24,7 @@ const { title, description = "Just Something" } = Astro.props;
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 		<ViewTransitions />
 	</head>
-	<body class="bg-[var(--bg)] text-[var(--ink)] font-sans selection:bg-[var(--accent)] selection:text-black transition-colors duration-300">
+	<body class="bg-[var(--bg)] text-[var(--ink)] font-sans selection:bg-[var(--accent)] selection:text-black transition-colors duration-300 overflow-x-hidden">
 		<div class="fixed inset-0 pointer-events-none z-50 border-[1px] border-[var(--line)] m-4"></div>
 
 		<header class="fixed top-0 left-0 right-0 z-40 bg-[var(--bg)]/95 backdrop-blur-md border-b border-[var(--line)]">
@@ -132,63 +132,77 @@ const { title, description = "Just Something" } = Astro.props;
 
 			window.localStorage.setItem('theme', theme);
 
-			const updateIcon = (theme) => {
-				const icon = document.getElementById('theme-icon');
-				if (theme === 'minimal') {
-					icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
-				} else {
-					icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"></path>';
+			document.addEventListener('astro:page-load', () => {
+				const updateIcon = (theme) => {
+					const icon = document.getElementById('theme-icon');
+					if (!icon) return;
+					if (theme === 'minimal') {
+						icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+					} else {
+						icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z"></path>';
+					}
+				};
+
+				const handleToggleClick = () => {
+					const element = document.documentElement;
+					const isMinimal = element.getAttribute('data-theme') === 'minimal';
+					const newTheme = isMinimal ? 'terminal' : 'minimal';
+					element.setAttribute('data-theme', newTheme);
+					localStorage.setItem('theme', newTheme);
+					updateIcon(newTheme);
+				};
+
+				const themeToggle = document.getElementById('theme-toggle');
+				if (themeToggle) {
+					themeToggle.addEventListener('click', handleToggleClick);
 				}
-			};
+				updateIcon(localStorage.getItem('theme') || 'terminal');
 
-			const handleToggleClick = () => {
-				const element = document.documentElement;
-				const isMinimal = element.getAttribute('data-theme') === 'minimal';
-				const newTheme = isMinimal ? 'terminal' : 'minimal';
-				element.setAttribute('data-theme', newTheme);
-				localStorage.setItem('theme', newTheme);
-				updateIcon(newTheme);
-			};
+				// Mobile menu toggle
+				const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+				const mobileNav = document.getElementById('mobile-nav');
+				const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+				const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+				const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+				const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-			document.getElementById('theme-toggle').addEventListener('click', handleToggleClick);
-			updateIcon(theme);
+				if (mobileMenuToggle && mobileNav) {
+					const closeMobileNav = () => {
+						if (mobileNavDrawer) mobileNavDrawer.classList.add('translate-x-full');
+						setTimeout(() => {
+							mobileNav.classList.add('hidden');
+							mobileNav.setAttribute('aria-hidden', 'true');
+						}, 300);
+						if (mobileMenuIcon) {
+							mobileMenuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
+						}
+					};
 
-			// Mobile menu toggle
-			const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-			const mobileNav = document.getElementById('mobile-nav');
-			const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
-			const mobileMenuIcon = document.getElementById('mobile-menu-icon');
-			const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
-			const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+					mobileMenuToggle.addEventListener('click', () => {
+						const isHidden = mobileNav.classList.contains('hidden');
+						if (isHidden) {
+							mobileNav.classList.remove('hidden');
+							mobileNav.setAttribute('aria-hidden', 'false');
+							// Trigger slide-in animation
+							setTimeout(() => {
+								if (mobileNavDrawer) mobileNavDrawer.classList.remove('translate-x-full');
+							}, 10);
+							if (mobileMenuIcon) {
+								mobileMenuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
+							}
+						} else {
+							closeMobileNav();
+						}
+					});
 
-			const closeMobileNav = () => {
-				mobileNavDrawer.classList.add('translate-x-full');
-				setTimeout(() => {
-					mobileNav.classList.add('hidden');
-					mobileNav.setAttribute('aria-hidden', 'true');
-				}, 300);
-				mobileMenuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
-			};
+					if (mobileNavOverlay) {
+						mobileNavOverlay.addEventListener('click', closeMobileNav);
+					}
 
-			mobileMenuToggle.addEventListener('click', () => {
-				const isHidden = mobileNav.classList.contains('hidden');
-				if (isHidden) {
-					mobileNav.classList.remove('hidden');
-					mobileNav.setAttribute('aria-hidden', 'false');
-					// Trigger slide-in animation
-					setTimeout(() => {
-						mobileNavDrawer.classList.remove('translate-x-full');
-					}, 10);
-					mobileMenuIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
-				} else {
-					closeMobileNav();
+					mobileNavLinks.forEach(link => {
+						link.addEventListener('click', closeMobileNav);
+					});
 				}
-			});
-
-			mobileNavOverlay.addEventListener('click', closeMobileNav);
-
-			mobileNavLinks.forEach(link => {
-				link.addEventListener('click', closeMobileNav);
 			});
 		</script>
 
@@ -360,6 +374,12 @@ const { title, description = "Just Something" } = Astro.props;
 				html {
 					font-size: 16px;
 				}
+				.typing-effect {
+					white-space: normal;
+					animation: none;
+					border-right: none;
+					width: auto;
+				}
 				.prose h1 {
 					font-size: 2rem;
 				}
@@ -481,6 +501,8 @@ const { title, description = "Just Something" } = Astro.props;
 			.prose img {
 				margin: 2rem 0;
 				border-radius: 0.5rem;
+				max-width: 100%;
+				height: auto;
 			}
 		</style>
 	</body>
