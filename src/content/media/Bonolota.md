@@ -5,7 +5,7 @@ image: "/media/bonolota.png"
 rating: "8.5/10"
 year: "2026"
 status: "Completed"
-pubDate: "2024-12-30"
+pubDate: "2026-03-15"
 ---
 
 ## Thoughts
