@@ -1,0 +1,57 @@
+---
+/**
+ * About — Bio paragraphs + stats grid.
+ * Numbered section header for editorial feel.
+ * All text extracted verbatim from the existing index.astro.
+ */
+const stats = [
+  { value: '3+',  label: 'Years Building' },
+  { value: '20+', label: 'Projects & Notes' },
+  { value: '#49', label: 'Global CTF Rank' },
+  { value: '#3',  label: 'National Rank' },
+];
+---
+
+<section id="about" class="py-24 md:py-32">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <!-- Section header -->
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="text-xs font-mono text-blue-400 tracking-wider">01</span>
+      <div class="h-px flex-1 bg-zinc-800"></div>
+      <h2 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">About</h2>
+    </div>
+
+    <div class="grid md:grid-cols-[1.2fr_1fr] gap-16">
+      <!-- Bio text -->
+      <div class="space-y-6">
+        <p class="text-lg text-zinc-300 leading-relaxed reveal">
+          I am Abdul Hakim Shifat, known online as
+          <span class="text-white font-medium">Joyboy__</span>.
+          I am from Bangladesh and study Computer Science and Engineering while
+          building tools, writing technical notes, and competing in cybersecurity
+          challenges.
+        </p>
+        <p class="text-zinc-400 leading-relaxed reveal">
+          My strongest work happens where systems thinking meets security
+          research: CTF tooling, Linux experiments, reverse engineering notes,
+          practical automation, and carefully documented learning.
+        </p>
+        <p class="text-zinc-400 leading-relaxed reveal">
+          I prefer durable work: small tools that solve real problems, writeups
+          that teach clearly, and projects that keep improving after the first
+          release.
+        </p>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="grid grid-cols-2 gap-4 stagger">
+        {stats.map(stat => (
+          <div class="p-6 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors duration-300 reveal">
+            <p class="text-3xl font-bold text-white mb-1">{stat.value}</p>
+            <p class="text-xs font-mono uppercase tracking-wider text-zinc-500">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

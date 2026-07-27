@@ -4,8 +4,6 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
     "allowJs": true,
     "noEmit": true,
     "skipLibCheck": true,

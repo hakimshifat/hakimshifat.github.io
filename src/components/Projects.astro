@@ -1,0 +1,102 @@
+---
+/**
+ * Projects — Card grid showcasing key projects.
+ * Data sourced from src/content/projects/ markdown files.
+ * Images are lazy-loaded; first project image is above fold on desktop.
+ */
+const projects = [
+  {
+    title: 'YTUI Music',
+    description:
+      'A terminal-based YouTube audio player built with Textual, mpv, and yt-dlp. Keyboard-first, resource-efficient alternative to browser-based music listening. Published on the AUR.',
+    tags: ['Python', 'Textual', 'TUI', 'YouTube', 'MPV'],
+    image: '/images/projects/yt2.png',
+    link: 'https://github.com/hakimshifat/ytui_music',
+  },
+  {
+    title: 'Tiny x64 Bootloader',
+    description:
+      'A minimal 512-byte x64 boot sector demonstrating BIOS boot process fundamentals including real mode initialization, segment register setup, and stack configuration.',
+    tags: ['Assembly', 'x86_64', 'Low-Level', 'OS Dev'],
+    image: '/images/projects/x86.png',
+    link: 'https://github.com/hakimshifat/x86',
+  },
+  {
+    title: 'CTF Alert',
+    description:
+      'MVP mobile application for the global CTF community to discover upcoming contests, submit events, and manage event reminders with role-based access and approval workflows.',
+    tags: ['Kotlin', 'Jetpack Compose', 'MVVM', 'Android'],
+    image: '/images/projects/ctf-alert.png',
+    link: 'https://github.com/hakimshifat/ctf-alert',
+  },
+  {
+    title: 'Personal Portfolio & Blog',
+    description:
+      'Theme-driven site that dynamically renders content from an Obsidian vault, automating the pipeline from private technical notes to public blog posts.',
+    tags: ['Astro', 'Obsidian', 'Tailwind'],
+    image: '/images/projects/port.png',
+    link: 'https://github.com/hakimshifat/hakimshifat.github.io',
+  },
+];
+---
+
+<section id="projects" class="py-24 md:py-32">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="text-xs font-mono text-blue-400 tracking-wider">03</span>
+      <div class="h-px flex-1 bg-zinc-800"></div>
+      <h2 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Projects</h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 stagger">
+      {projects.map(project => {
+        const CardTag = project.link ? 'a' : 'article';
+        const cardProps = project.link ? { href: project.link, target: "_blank", rel: "noopener noreferrer" } : {};
+
+        return (
+          <CardTag {...cardProps} class={`group block border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-700 hover:bg-zinc-900/30 transition-all duration-300 reveal flex flex-col h-full ${project.link ? 'cursor-pointer' : ''}`}>
+            {project.image ? (
+              <div class="aspect-video overflow-hidden bg-zinc-900 border-b border-zinc-800 shrink-0">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-500"
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <div class="aspect-video bg-zinc-900 flex items-center justify-center border-b border-zinc-800 shrink-0">
+                <span class="text-zinc-600 font-mono text-sm">Image Placeholder</span>
+              </div>
+            )}
+
+            <div class="p-6 flex flex-col flex-1">
+              <div class="flex items-start justify-between gap-4 mb-3">
+                <h3 class="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors duration-200">
+                  {project.title}
+                </h3>
+                {project.link && (
+                  <span class="shrink-0 text-zinc-500 group-hover:text-blue-400 transition-colors duration-200">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+                    </svg>
+                  </span>
+                )}
+              </div>
+
+              <p class="text-sm text-zinc-400 leading-relaxed mb-4">{project.description}</p>
+
+              <div class="flex flex-wrap gap-2 mt-auto">
+                {project.tags.map(tag => (
+                  <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500 bg-zinc-800/50 px-2.5 py-1 rounded-md">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </CardTag>
+        );
+      })}
+    </div>
+  </div>
+</section>

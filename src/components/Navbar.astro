@@ -1,0 +1,111 @@
+---
+/**
+ * Navbar — Sticky navigation with smooth scroll anchors.
+ * Transparent by default, gains backdrop-blur on scroll via .nav-scrolled class.
+ * Mobile: hamburger toggle reveals a dropdown menu.
+ */
+const navItems = [
+  { href: '/#about', label: 'About' },
+  { href: '/#education', label: 'Education' },
+  { href: '/#skills', label: 'Skills' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#writeups', label: 'Writeups' },
+  { href: '/#contact', label: 'Contact' },
+];
+---
+
+<header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+  <div class="max-w-[1100px] mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a
+      href="/"
+      class="font-semibold text-lg tracking-tight hover:text-blue-400 transition-colors duration-200"
+      aria-label="Back to home"
+    >
+      HS<span class="text-blue-500">.</span>
+    </a>
+
+    <!-- Desktop links -->
+    <nav class="hidden md:flex items-center gap-5 lg:gap-8" aria-label="Main navigation">
+      {navItems.map(item => (
+        <a
+          href={item.href}
+          class="text-[11px] lg:text-[13px] tracking-wide uppercase text-zinc-400 hover:text-white transition-colors duration-200"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="menu-toggle"
+      class="md:hidden relative w-6 h-5 flex flex-col justify-between"
+      type="button"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+    >
+      <span class="block w-full h-px bg-white transition-all duration-300 origin-center"></span>
+      <span class="block w-full h-px bg-white transition-all duration-300"></span>
+      <span class="block w-4 h-px bg-white transition-all duration-300 ml-auto origin-center"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu (hidden by default) -->
+  <div
+    id="mobile-menu"
+    class="md:hidden hidden flex-col border-t border-zinc-800 bg-zinc-950/95 backdrop-blur-xl"
+    role="navigation"
+    aria-label="Mobile navigation"
+  >
+    <div class="max-w-[1100px] mx-auto px-6 py-6 flex flex-col gap-1">
+      {navItems.map(item => (
+        <a
+          href={item.href}
+          class="text-sm text-zinc-400 hover:text-white transition-colors py-3 border-b border-zinc-800/50 last:border-0"
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</header>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  /* ── Scroll-based background ── */
+  function onScroll() {
+    if (window.scrollY > 20) {
+      navbar?.classList.add('nav-scrolled');
+    } else {
+      navbar?.classList.remove('nav-scrolled');
+    }
+  }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ── Mobile menu toggle ── */
+  menuToggle?.addEventListener('click', () => {
+    const isHidden = mobileMenu?.classList.contains('hidden');
+    if (isHidden) {
+      mobileMenu?.classList.remove('hidden');
+      mobileMenu?.classList.add('flex');
+    } else {
+      mobileMenu?.classList.add('hidden');
+      mobileMenu?.classList.remove('flex');
+    }
+    menuToggle.setAttribute('aria-expanded', String(!!isHidden));
+  });
+
+  /* ── Close on link click ── */
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+      mobileMenu?.classList.remove('flex');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>

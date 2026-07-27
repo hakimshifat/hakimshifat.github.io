@@ -1,0 +1,31 @@
+---
+/**
+ * Coding Profiles — Compact grid of competitive programming stats.
+ */
+const profiles = [
+  { platform: 'Codeforces', stat: '465+', label: 'Problems Solved' },
+  { platform: 'CodeChef', stat: '1542', label: 'Rating' },
+  { platform: 'LeetCode', stat: '106+', label: 'Problems Solved' },
+  { platform: 'picoCTF', stat: '172', label: 'Challenges Solved' },
+];
+---
+
+<section id="coding" class="py-24 md:py-32 bg-zinc-900/30">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="text-xs font-mono text-blue-400 tracking-wider">04.5</span>
+      <div class="h-px flex-1 bg-zinc-800"></div>
+      <h2 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Coding Profiles</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger">
+      {profiles.map(profile => (
+        <div class="p-6 border border-zinc-800 rounded-xl hover:border-zinc-700 hover:bg-zinc-800/20 transition-all duration-300 reveal text-center flex flex-col justify-center h-full">
+          <p class="text-xs font-mono uppercase tracking-wider text-zinc-500 mb-3">{profile.platform}</p>
+          <p class="text-3xl font-bold text-white mb-1">{profile.stat}</p>
+          <p class="text-sm text-zinc-400">{profile.label}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,59 @@
+---
+/**
+ * Education — Academic background.
+ */
+const education = [
+  {
+    degree: 'B.Sc. in Computer Science and Engineering',
+    institution: 'Bangladesh University of Professionals (BUP)',
+    duration: 'Jun 2023 – Jul 2027',
+    grade: 'CGPA: 3.45 / 4.00 (5th Semester)',
+  },
+  {
+    degree: 'HSC',
+    institution: 'Nawab Fayzunnesa Govt. College',
+    duration: '',
+    grade: 'GPA: 5.00 / 5.00',
+  },
+  {
+    degree: 'SSC',
+    institution: 'Kakirtala High School',
+    duration: '',
+    grade: 'GPA: 4.89 / 5.00',
+  },
+];
+---
+
+<section id="education" class="py-24 md:py-32">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <!-- Section header -->
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="text-xs font-mono text-blue-400 tracking-wider">01.5</span>
+      <div class="h-px flex-1 bg-zinc-800"></div>
+      <h2 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Education</h2>
+    </div>
+
+    <div class="space-y-6 stagger">
+      {education.map(edu => (
+        <article class="group p-6 md:p-8 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-all duration-300 reveal">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors duration-200">
+                {edu.degree}
+              </h3>
+              <p class="text-zinc-400 mt-1">{edu.institution}</p>
+            </div>
+            <div class="flex flex-col items-start md:items-end gap-1 shrink-0">
+              {edu.duration && (
+                <span class="text-xs font-mono text-zinc-500">{edu.duration}</span>
+              )}
+              <span class="mt-1 md:mt-0 text-[11px] font-mono uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full border border-emerald-400/20 inline-block w-fit">
+                {edu.grade}
+              </span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

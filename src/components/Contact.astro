@@ -1,0 +1,83 @@
+---
+/**
+ * Contact — Simple contact links section.
+ * Email, GitHub, LinkedIn, Discord — all from existing codebase.
+ */
+const contacts = [
+  {
+    label: 'Email',
+    value: 'hakimshifat@proton.me',
+    href: 'mailto:hakimshifat@proton.me',
+  },
+  {
+    label: 'GitHub',
+    value: 'hakimshifat',
+    href: 'https://github.com/hakimshifat',
+  },
+  {
+    label: 'LinkedIn',
+    value: 'hakimshifat',
+    href: 'https://linkedin.com/in/hakimshifat',
+  },
+  {
+    label: 'Discord',
+    value: 'joyboy__',
+    href: null,
+  },
+];
+---
+
+<section id="contact" class="py-24 md:py-32">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <!-- Section header -->
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="text-xs font-mono text-blue-400 tracking-wider">06</span>
+      <div class="h-px flex-1 bg-zinc-800"></div>
+      <h2 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Contact</h2>
+    </div>
+
+    <div class="max-w-2xl reveal">
+      <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">
+        Let's connect<span class="text-blue-500">.</span>
+      </h3>
+      <p class="text-zinc-400 leading-relaxed mb-12">
+        I'm always open to discussing cybersecurity, open-source projects,
+        competitive programming, or anything tech-related. Feel free to reach out.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4 stagger">
+      {contacts.map(contact =>
+        contact.href ? (
+          <a
+            href={contact.href}
+            target={contact.href.startsWith('mailto') ? undefined : '_blank'}
+            rel={contact.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+            class="group flex items-center justify-between p-5 border border-zinc-800 rounded-xl hover:border-zinc-700 hover:bg-zinc-900/50 transition-all duration-300 reveal"
+          >
+            <div>
+              <p class="text-xs font-mono uppercase tracking-wider text-zinc-500 mb-1">{contact.label}</p>
+              <p class="text-sm text-white group-hover:text-blue-400 transition-colors duration-200">{contact.value}</p>
+            </div>
+            <svg
+              class="w-4 h-4 text-zinc-600 group-hover:text-blue-400 transition-all duration-200 group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+            </svg>
+          </a>
+        ) : (
+          <div class="flex items-center p-5 border border-zinc-800 rounded-xl reveal">
+            <div>
+              <p class="text-xs font-mono uppercase tracking-wider text-zinc-500 mb-1">{contact.label}</p>
+              <p class="text-sm text-white">{contact.value}</p>
+            </div>
+          </div>
+        )
+      )}
+    </div>
+  </div>
+</section>

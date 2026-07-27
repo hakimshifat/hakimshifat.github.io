@@ -1,0 +1,117 @@
+---
+/**
+ * Experience — Timeline-style cards for each role.
+ * Data sourced from src/content/experience/ markdown files.
+ */
+const experiences = [
+  {
+    role: 'Co-Founder & Security Researcher',
+    company: 'Cyb3r Invasi0n Army (CIA)',
+    duration: 'Aug 2025 — Present',
+    description:
+      'Co-founded a competitive CTF team focused on cybersecurity. Coordinate team strategy for international CTF competitions, manage challenge assignments based on member expertise, conduct post-competition analysis, and organize training sessions.',
+    tags: ['CTF', 'Cybersecurity', 'Leadership', 'Problem Solving'],
+    impact: 'Global Rank #49 · National Rank #3 (Bangladesh)',
+    current: true,
+    link: 'https://ctftime.org',
+  },
+  {
+    role: 'Maintainer & Creator',
+    company: 'YTUI Music (AUR)',
+    duration: 'Mar 2026 — Present',
+    description:
+      'Created and maintain a terminal-based YouTube audio player published on the Arch User Repository. Full-stack TUI development with Textual, AUR packaging via PKGBUILD, and release management.',
+    tags: ['Python', 'Textual', 'AUR', 'Open Source', 'MPV'],
+    impact: 'Published on AUR · One-command install',
+    current: true,
+    link: 'https://github.com/hakimshifat/ytui_music',
+  },
+  {
+    role: 'Open Source Contributor',
+    company: 'iNiR (snowarch)',
+    duration: 'Feb 2026',
+    description:
+      'Contributed configurable bar scroll actions and global workspace scroll inversion to a Linux desktop shell built on Quickshell. Designed a reusable input abstraction layer and ensured cross-compositor compatibility.',
+    tags: ['QML', 'Linux', 'Quickshell', 'Niri', 'UI'],
+    impact: 'Cherry Picked & Merged (PR #53)',
+    current: false,
+    link: 'https://github.com/snowarch/iNiR/pull/53',
+  },
+  {
+    role: 'Campus Ambassador',
+    company: 'GeeksforGeeks',
+    duration: 'Jan 2026 — Present',
+    description:
+      'Official representative for GeeksforGeeks at Bangladesh University of Professionals. Promote technical resources, organize coding events and seminars, and build the campus tech community.',
+    tags: ['Community', 'Leadership', 'Event Management', 'Tech Outreach'],
+    impact: null,
+    current: true,
+    link: null,
+  },
+];
+---
+
+<section id="experience" class="py-24 md:py-32">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <!-- Section header -->
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="text-xs font-mono text-blue-400 tracking-wider">02</span>
+      <div class="h-px flex-1 bg-zinc-800"></div>
+      <h2 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Experience</h2>
+    </div>
+
+    <div class="space-y-6 stagger">
+      {experiences.map(exp => (
+        <article class="group p-6 md:p-8 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-all duration-300 reveal">
+          {/* Header row: role + duration */}
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+            <div>
+              <h3 class="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors duration-200">
+                {exp.role}
+              </h3>
+              <p class="text-zinc-400 mt-1">
+                {exp.link ? (
+                  <a
+                    href={exp.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hover:text-blue-400 transition-colors duration-200"
+                  >
+                    @ {exp.company} ↗
+                  </a>
+                ) : (
+                  <span>@ {exp.company}</span>
+                )}
+              </p>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+              <span class="text-xs font-mono text-zinc-500">{exp.duration}</span>
+              {exp.current && (
+                <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full border border-emerald-400/20">
+                  Current
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Description */}
+          <p class="text-sm text-zinc-400 leading-relaxed mb-4">{exp.description}</p>
+
+          {/* Impact badge */}
+          {exp.impact && (
+            <p class="text-xs font-mono text-blue-400 mb-4">↳ {exp.impact}</p>
+          )}
+
+          {/* Tags */}
+          <div class="flex flex-wrap gap-2">
+            {exp.tags.map(tag => (
+              <span class="text-[11px] font-mono uppercase tracking-wider text-zinc-500 bg-zinc-800/50 px-2.5 py-1 rounded-md">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

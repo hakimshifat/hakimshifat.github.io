@@ -1,36 +1,48 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import BlogSearch from '../../components/BlogSearch';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
 
-const posts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort(
-	(a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-
-// Map posts to a simpler structure for the React component
-const searchPosts = posts.map(post => ({
-	slug: post.slug,
-	data: {
-		title: post.data.title,
-		description: post.data.description,
-		pubDate: post.data.pubDate,
-		tags: post.data.tags,
-		heroImage: post.data.heroImage,
-	}
-}));
 ---
 
-<Layout title="ARCHIVE // Portfolio_OS">
-	<div class="grid-lines fixed inset-0 pointer-events-none z-0"></div>
-
-	<div class="relative z-10">
-		<header class="py-20 border-b border-[var(--line)] text-center">
-			<h1 class="text-6xl font-display italic tracking-tighter text-[var(--ink)] mb-4 typing-effect">Archive</h1>
-			<p class="font-mono text-sm uppercase tracking-widest text-[var(--ink-secondary)]">Total Records: {posts.length}</p>
-		</header>
-
-		<section class="py-20">
-			<BlogSearch client:load posts={searchPosts} />
-		</section>
-	</div>
+<Layout title="Archive | Abdul Hakim Shifat">
+  <Navbar />
+  <main class="min-h-screen pt-32 pb-24">
+    <div class="max-w-[1100px] mx-auto px-6">
+      <div class="flex items-center gap-4 mb-16 reveal">
+        <div class="h-px w-8 bg-zinc-800"></div>
+        <h1 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">All Writeups ({posts.length})</h1>
+        <div class="h-px flex-1 bg-zinc-800"></div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger">
+        {posts.map(post => (
+          <a href={`/blog/${post.slug}`} class="group p-6 border border-zinc-800 rounded-xl hover:border-zinc-700 hover:bg-zinc-900/30 transition-all duration-300 reveal cursor-pointer relative overflow-hidden h-full flex flex-col block">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="relative z-10 flex flex-col flex-1">
+              <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                <span class="text-[11px] font-mono uppercase tracking-wider text-blue-400 bg-blue-400/10 px-2.5 py-1 rounded-md border border-blue-400/20">
+                  {post.data.tags?.[0] || 'Article'}
+                </span>
+                <span class="text-xs font-mono text-zinc-500">
+                  {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                </span>
+              </div>
+              <h3 class="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors duration-200 mb-2">
+                {post.data.title}
+              </h3>
+              <p class="text-sm text-zinc-400 mt-auto pt-4 line-clamp-3">
+                {post.data.description}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
 </Layout>

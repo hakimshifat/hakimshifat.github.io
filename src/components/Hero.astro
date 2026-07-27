@@ -1,0 +1,89 @@
+---
+/**
+ * Hero — Full-viewport intro section.
+ * Two-column layout: text left, photo right (stacked on mobile).
+ * All personal data extracted from existing codebase.
+ */
+import { Image } from 'astro:assets';
+import profileImage from '../assets/abdulhakim.png';
+---
+
+<section id="hero" class="min-h-screen flex items-center pt-16">
+  <div class="max-w-[1100px] mx-auto px-6 w-full py-16 md:py-0">
+    <div class="grid md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-center">
+      <!-- Text content -->
+      <div class="order-2 md:order-1">
+        <p class="text-xs font-mono uppercase tracking-[0.25em] text-blue-400 mb-6 reveal">
+          Security Researcher · Software Engineer · CTF Player
+        </p>
+
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] mb-8 reveal">
+          Abdul Hakim<br />
+          <span class="text-zinc-500">Shifat</span>
+        </h1>
+
+        <p class="text-lg text-zinc-400 leading-relaxed max-w-lg mb-10 reveal">
+          I build security tools, solve CTF challenges, and explore Linux and
+          low-level systems with a planner's patience. The work blends software
+          engineering, research, and open-source craftsmanship.
+        </p>
+
+        <div class="flex flex-wrap gap-4 reveal">
+          <a
+            href="#projects"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors duration-200"
+          >
+            View My Work
+            <!-- Down-arrow icon -->
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </a>
+          <!-- TODO: Place your actual resume PDF at public/resume.pdf -->
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white text-sm font-medium rounded-lg transition-all duration-200"
+          >
+            Download Resume
+            <!-- Download icon -->
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+          </a>
+          <a
+            href="https://github.com/hakimshifat"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white text-sm font-medium rounded-lg transition-all duration-200"
+          >
+            GitHub
+            <!-- External-link icon -->
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Profile photo -->
+      <div class="order-1 md:order-2 flex justify-center md:justify-end reveal">
+        <div class="relative">
+          <div class="w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-blue-500/5 bg-zinc-900">
+            <Image
+              src={profileImage}
+              alt="Abdul Hakim Shifat"
+              class="w-full h-full object-cover"
+              width={256}
+              height={256}
+              loading="eager"
+            />
+          </div>
+          <!-- Decorative offset border -->
+          <div class="absolute -bottom-3 -right-3 w-48 h-48 md:w-64 md:h-64 rounded-2xl border border-blue-500/20 -z-10" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
