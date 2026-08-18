@@ -35,17 +35,14 @@ const siteUrl = Astro.site?.toString() ?? 'https://hakimshifat.me';
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#09090b" />
+    <link rel="canonical" href={siteUrl} />
+    <meta name="robots" content="index, follow" />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={siteUrl} />
-    <!--
-      TODO: Place your Open Graph preview image at public/og-image.png
-      Recommended size: 1200×630px. This image appears when the site is
-      shared on social media (LinkedIn, Twitter/X, Discord, etc.).
-    -->
     <meta property="og:image" content={`${siteUrl}/og-image.png`} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -65,7 +62,12 @@ const siteUrl = Astro.site?.toString() ?? 'https://hakimshifat.me';
     />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <slot />
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
 
     <!-- Scroll Reveal: IntersectionObserver adds .visible to .reveal elements -->
     <script is:inline>

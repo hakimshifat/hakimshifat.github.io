@@ -39,6 +39,31 @@
     background-color: rgba(59, 130, 246, 0.3);
     color: #fff;
   }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-hover);
+    outline-offset: 4px;
+  }
+
+  .skip-link {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    z-index: 100;
+    transform: translateY(-200%);
+    border: 1px solid var(--accent);
+    border-radius: 0.5rem;
+    background: var(--bg-elevated);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
 }
 
 /* ─── Navbar Scroll State ─── */
@@ -50,7 +75,7 @@
 }
 
 /* ─── Scroll Reveal Animation ─── */
-.reveal {
+.js .reveal {
   opacity: 0;
   transform: translateY(20px);
   transition:
@@ -58,7 +83,7 @@
     transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.reveal.visible {
+.js .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -81,7 +106,7 @@
     scroll-behavior: auto;
   }
 
-  .reveal {
+  .js .reveal {
     opacity: 1;
     transform: none;
     transition: none;
