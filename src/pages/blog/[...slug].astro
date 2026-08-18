@@ -51,11 +51,19 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 ---
 
 <Layout title={`${post.data.title} | Abdul Hakim Shifat`} description={post.data.description}>
+  <div id="reading-progress" aria-hidden="true"></div>
   <Navbar />
 
   <main id="main-content" class="min-h-screen pt-32 pb-24">
     <div class="max-w-[800px] mx-auto px-6">
       <header class="article-header mb-14 reveal">
+        <nav class="article-breadcrumbs mb-8" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-blue-400 transition-colors">Home</a>
+          <span>/</span>
+          <a href="/blog" class="hover:text-blue-400 transition-colors">Writing</a>
+          <span>/</span>
+          <span class="text-zinc-600">{post.data.type || 'article'}</span>
+        </nav>
         <a href="/blog" class="text-xs font-mono uppercase tracking-widest text-zinc-500 hover:text-blue-400 transition-colors mb-8 inline-block">
           ← Back to Archive
         </a>
@@ -134,6 +142,21 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 </Layout>
 
 <script>
+  const progress = document.getElementById('reading-progress');
+  const article = document.querySelector('.article-body');
+
+  const updateReadingProgress = () => {
+    if (!progress || !article) return;
+    const bounds = article.getBoundingClientRect();
+    const readableHeight = article.scrollHeight - window.innerHeight;
+    const distance = Math.max(0, -bounds.top);
+    const percentage = readableHeight > 0 ? Math.min(100, (distance / readableHeight) * 100) : 0;
+    progress.style.width = `${percentage}%`;
+  };
+
+  window.addEventListener('scroll', updateReadingProgress, { passive: true });
+  updateReadingProgress();
+
   document.querySelectorAll('.article-body pre').forEach((pre) => {
     if (pre.querySelector('.code-copy-button')) return;
 
@@ -160,6 +183,30 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 </script>
 
 <style is:global>
+  #reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-rose), var(--accent-cyan));
+    box-shadow: 0 0 12px rgba(201, 151, 255, 0.65);
+    transition: width 0.08s linear;
+  }
+
+  .article-breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   .article-header {
     position: relative;
   }
@@ -189,7 +236,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
     padding: 1.1rem 1.25rem;
     border: 1px solid var(--border);
     border-radius: 0.85rem;
-    background: linear-gradient(120deg, rgba(59, 130, 246, 0.07), rgba(24, 24, 27, 0.35));
+    background: linear-gradient(120deg, rgba(201, 151, 255, 0.07), rgba(24, 24, 27, 0.35));
   }
 
   .article-toc ol {
@@ -317,7 +364,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
     border-radius: 0 0.75rem 0.75rem 0;
-    background: linear-gradient(100deg, rgba(59, 130, 246, 0.08), transparent);
+    background: linear-gradient(100deg, rgba(201, 151, 255, 0.08), transparent);
     color: var(--text-secondary);
   }
 
@@ -328,10 +375,10 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
   .article-body code {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.82em;
-    color: #bfdbfe;
-    background: rgba(59, 130, 246, 0.1);
+    color: #eadcff;
+    background: rgba(201, 151, 255, 0.1);
     padding: 0.18em 0.4em;
-    border: 1px solid rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(201, 151, 255, 0.2);
     border-radius: 0.35rem;
   }
 
@@ -430,7 +477,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
     border-radius: 0 0.75rem 0.75rem 0;
-    background: rgba(59, 130, 246, 0.07);
+    background: rgba(201, 151, 255, 0.07);
   }
 
   .article-body .callout::before {
@@ -448,7 +495,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 
   .article-body .callout-note,
   .article-body .callout-info {
-    border-left-color: #60a5fa;
+    border-left-color: var(--accent-hover);
   }
 
   .article-body .callout-tip {
