@@ -42,8 +42,10 @@ function getPublicImageIndex(): string[] {
 }
 
 function resolveImageAsset(value: string): string {
-  const trimmed = value.trim().replace(/^\/+/, '');
-  if (trimmed.startsWith('public/images/')) return trimmed;
+  const rawPath = value.trim().replace(/^\/+/, '');
+  const trimmed = decodeURIComponent(rawPath);
+  const publicIndex = trimmed.indexOf('public/images/');
+  if (publicIndex >= 0) return trimmed.slice(publicIndex);
   if (trimmed.startsWith('images/')) return `public/${trimmed}`;
 
   const expectedPath = `public/images/${trimmed}`;

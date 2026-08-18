@@ -30,6 +30,21 @@ draft: false
 
 The supported `type` values are `article`, `note`, `guide`, `writeup`, and `project`. Older posts without these fields remain valid and default to `article`.
 
+## Templates and pasted images
+
+Copyable templates live in `templates/`:
+
+| Template | Use it for |
+| --- | --- |
+| `obsidian-writeup.md` | CTF, pwn, reverse-engineering, and security writeups. |
+| `obsidian-book-review.md` | Structured reviews with spoiler-safe summary and criticism. |
+| `obsidian-blog.md` | Normal technical posts, guides, and essays. |
+| `obsidian-experience.md` | Drafting role narratives and evidence of impact. |
+
+The repository includes `.obsidian/app.json`, which configures Obsidian to place pasted attachments in `public/images/blog/`. Open the **repository root** as the vault for this setting to apply. You can paste an image directly into any template section; Obsidian will create the embed and the build will normalize it for the website.
+
+Experience notes are drafting aids. The homepage’s professional Experience section remains sourced from `src/data/experience.ts`, so promote a finalized entry there when you want it to appear in the main resume-style narrative.
+
 ## Obsidian links
 
 Use wiki links for related public notes:

@@ -1,0 +1,5 @@
+{
+  "attachmentFolderPath": "public/images/blog",
+  "newLinkFormat": "relative",
+  "useMarkdownLinks": true
+}

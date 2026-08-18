@@ -11,32 +11,53 @@ tags:
   - ctf
 ---
 
+# {{title}}
+
 ## Challenge overview
 
-Optional screenshot or artifact:
-
-```md
-![](public/images/blog/your-image.png)
-```
-
-The build also accepts `![[public/images/blog/your-image.png|Short description]]` if you prefer Obsidian wikilinks.
+| Field | Details |
+| --- | --- |
+| Platform |  |
+| Category |  |
+| Difficulty |  |
+| Challenge URL |  |
+| Flag format |  |
 
 What was the challenge, target, or research question?
 
+## Visual evidence
+
+Paste screenshots directly below this heading. Because the repository is configured as an Obsidian vault, pasted images are stored under `public/images/blog/` automatically.
+
+<!-- For an existing image, ordinary Markdown also works: -->
+<!-- ![](<public/images/blog/Pasted image 20260818120000.png>) -->
+
 ## Reconnaissance
 
-What did you inspect first? Include commands, observations, and useful artifacts.
+What did you inspect first? Include commands, observations, endpoints, binaries, or useful artifacts.
+
+```bash
+# Reproducible commands go here
+```
 
 ## Vulnerability or insight
 
 > [!IMPORTANT]
 > State the key insight in one or two sentences before showing the final solution.
 
-Explain the key idea clearly before showing the final solution.
+Explain the root cause, unexpected behavior, or mental model clearly.
 
 ## Solution
 
-Document the reproducible steps, code, payloads, or commands.
+Document the reproducible steps, code, payloads, or commands. Explain why each step works.
+
+```text
+Input → behavior → result
+```
+
+## Verification
+
+Show the successful output, flag, proof, or test condition without exposing unnecessary secrets.
 
 ## Lessons learned
 
