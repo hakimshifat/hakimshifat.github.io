@@ -42,6 +42,18 @@ For a friendlier label, use [[Nice - The Priority Scheduling Modification|proces
 
 Wiki links are converted to `/blog/<slug>/` links at build time. Standard Markdown links continue to work as usual.
 
+## Embedded images
+
+Use vault-relative embedded wikilinks for images. Keep the `public/` prefix because the repository is also an Obsidian vault:
+
+```md
+![[public/images/blog/Pasted image 20260110095402.png|Patchbay screenshot]]
+```
+
+Obsidian previews this directly from the cloned vault. During the Astro build, the custom Markdown transformer converts the same embed into `/images/blog/...`, so the published website uses the corresponding file from `public/images/`. Avoid website-only paths such as `![](/images/blog/example.png)` when writing new notes; those work in the browser but do not resolve from an Obsidian vault.
+
+Keep image filenames and folders synchronized with the actual files under `public/`. Spaces are fine in Obsidian wikilinks; do not URL-encode them inside the wikilink.
+
 ## Callouts
 
 Obsidian callouts are supported for notes, warnings, tips, and important insights:

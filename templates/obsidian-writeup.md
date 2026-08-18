@@ -13,6 +13,12 @@ tags:
 
 ## Challenge overview
 
+Optional screenshot or artifact:
+
+```md
+![[public/images/blog/your-image.png|Short description]]
+```
+
 What was the challenge, target, or research question?
 
 ## Reconnaissance

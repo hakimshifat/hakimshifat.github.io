@@ -37,7 +37,7 @@ YTUI Music is built around a simple constraint: **search YouTube and listen with
 
 That constraint changes the interaction design. Keyboard focus matters. A search request cannot freeze the list. The player should not leak mpv-specific calls into every widget. A package that works on one machine is not finished if another Arch user cannot install it predictably.
 
-![YTUI Music terminal interface](/images/case-studies/ytui-music.png)
+![[public/images/case-studies/ytui-music.png|YTUI Music terminal interface]]
 
 ## The architecture is a set of boundaries
 

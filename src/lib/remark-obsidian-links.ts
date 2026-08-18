@@ -16,6 +16,12 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function assetUrl(value: string): string {
+  const vaultPath = value.trim().replace(/^\/+/, '');
+  const publicPath = vaultPath.startsWith('public/') ? vaultPath.slice('public/'.length) : vaultPath;
+  return `/${publicPath.split('/').map((segment) => encodeURIComponent(segment)).join('/')}`;
+}
+
 function transformCallouts(node: MarkdownNode): void {
   if (!node.children) return;
 
@@ -49,10 +55,37 @@ function transformChildren(node: MarkdownNode): void {
   if (!node.children) return;
 
   const nextChildren: MarkdownNode[] = [];
+  const wikiImagePattern = /!\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
   const wikiLinkPattern = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
 
   for (const child of node.children) {
-    if (child.type !== 'text' || !child.value || !wikiLinkPattern.test(child.value)) {
+    if (child.type !== 'text' || !child.value) {
+      transformChildren(child);
+      nextChildren.push(child);
+      continue;
+    }
+
+    const imageMatch = wikiImagePattern.exec(child.value);
+    wikiImagePattern.lastIndex = 0;
+    if (imageMatch) {
+      let cursor = 0;
+      let match: RegExpExecArray | null;
+      while ((match = wikiImagePattern.exec(child.value)) !== null) {
+        if (match.index > cursor) {
+          nextChildren.push({ type: 'text', value: child.value.slice(cursor, match.index) });
+        }
+        const target = match[1].trim();
+        const alt = (match[2] ?? target.split('/').pop() ?? 'Embedded image').trim();
+        nextChildren.push({ type: 'image', url: assetUrl(target), title: null, data: { hProperties: { alt } } });
+        cursor = match.index + match[0].length;
+      }
+      if (cursor < child.value.length) {
+        nextChildren.push({ type: 'text', value: child.value.slice(cursor) });
+      }
+      continue;
+    }
+
+    if (!wikiLinkPattern.test(child.value)) {
       wikiLinkPattern.lastIndex = 0;
       transformChildren(child);
       nextChildren.push(child);
