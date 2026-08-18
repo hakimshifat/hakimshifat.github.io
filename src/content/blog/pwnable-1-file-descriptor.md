@@ -5,11 +5,15 @@ pubDate: "2026-05-01"
 tags: ["ctf", "pwn", "linux"]
 type: writeup
 featured: true
+heroImage: "/images/blog/pwnable-1-file-descriptor/Pasted%20image%2020260501122824.png"
 ---
 ![](/images/blog/pwnable-1-file-descriptor/Pasted%20image%2020260501122824.png)
 
 
-After *ssh*ing into ther server
+After SSHing into the server:
+
+> [!TIP]
+> The key idea is to make `fd` equal to `0`, which points `read()` at standard input. Since the program subtracts `0x1234`, the required argument is `0x1234` in decimal: `4660`.
 
 ![](/images/blog/pwnable-1-file-descriptor/Pasted%20image%2020260501122948.png)
 
@@ -42,25 +46,22 @@ int main(int argc, char* argv[], char* envp[]){
 ```
 
 
-Let us analyze it, First check is **argc**, that is **argument count**, which must be greater than 2.
-That means while running the *fd* binary, we must provide an argument with it.
-Next 
+Let us analyze it. The first check is **argc**, the **argument count**, which must be at least `2`. That means we must provide one argument when running the `fd` binary. Next 
 ```C
  int fd = atoi( argv[1] ) - 0x1234;
 ```
 
 So *fd* is initialized with *the first argument* - *0x1234*
-But what does *atoi* does.
+But what does `atoi()` do?
 ![](/images/blog/pwnable-1-file-descriptor/Pasted%20image%2020260501123343.png)
 
-Now, that clear and out of the way.
-Next
+Now that is clear, let us move on to the next step.
 ```C
         int len = 0;
         len = read(fd, buf, 32);
 ```
 
-A variable *len* is initialized. Then **read** function is used to read input to buffer of exactly 32 bytes. But whats *fd* doing here ? Lets look at the manual page of *read*
+A variable *len* is initialized. Then **read** function is used to read input to buffer of exactly 32 bytes. But what is `fd` doing here? Let us look at the manual page for `read()`.
 ![](/images/blog/pwnable-1-file-descriptor/Pasted%20image%2020260501123538.png)
 
 So basically fd says from which **File Descriptor** should the read function take input from
@@ -80,7 +81,7 @@ Next,
         }
 ```
 
-Then *strcmp* compares the input stored at buf with "LETMEWIN\n", So if we want to give input by standard input, we must set fd = 0,
+Then `strcmp()` compares the input stored in `buf` with `LETMEWIN\n`. If we want to provide that input through standard input, we must set `fd = 0`.
 For that, 
 ![](/images/blog/pwnable-1-file-descriptor/Pasted%20image%2020260501123952.png)
 

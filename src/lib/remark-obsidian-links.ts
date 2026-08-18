@@ -4,6 +4,7 @@ type MarkdownNode = {
   url?: string;
   title?: string | null;
   children?: MarkdownNode[];
+  data?: Record<string, unknown>;
 };
 
 function slugify(value: string): string {
@@ -13,6 +14,35 @@ function slugify(value: string): string {
     .replace(/\.md$/i, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function transformCallouts(node: MarkdownNode): void {
+  if (!node.children) return;
+
+  for (const child of node.children) {
+    if (child.type === 'blockquote' && child.children?.[0]?.type === 'paragraph') {
+      const firstParagraph = child.children[0];
+      const firstText = firstParagraph.children?.[0];
+
+      if (firstText?.type === 'text' && firstText.value) {
+        const match = firstText.value.match(/^\[!([A-Za-z]+)\](?:[+-])?\s*/);
+        if (match) {
+          const calloutType = match[1].toLowerCase();
+          firstText.value = firstText.value.slice(match[0].length);
+          child.data = {
+            ...(child.data ?? {}),
+            hName: 'aside',
+            hProperties: {
+              className: ['callout', `callout-${calloutType}`],
+              'data-callout': calloutType,
+            },
+          };
+        }
+      }
+    }
+
+    transformCallouts(child);
+  }
 }
 
 function transformChildren(node: MarkdownNode): void {
@@ -60,5 +90,6 @@ function transformChildren(node: MarkdownNode): void {
 export default function remarkObsidianLinks() {
   return (tree: MarkdownNode) => {
     transformChildren(tree);
+    transformCallouts(tree);
   };
 }

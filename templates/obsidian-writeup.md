@@ -21,6 +21,9 @@ What did you inspect first? Include commands, observations, and useful artifacts
 
 ## Vulnerability or insight
 
+> [!IMPORTANT]
+> State the key insight in one or two sentences before showing the final solution.
+
 Explain the key idea clearly before showing the final solution.
 
 ## Solution
@@ -28,6 +31,9 @@ Explain the key idea clearly before showing the final solution.
 Document the reproducible steps, code, payloads, or commands.
 
 ## Lessons learned
+
+> [!TIP]
+> End with a reusable technique, command, or mental model.
 
 What technique should a future reader reuse?
 

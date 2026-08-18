@@ -18,6 +18,9 @@ What prompted this note?
 
 Write the observation, concept, command, or experiment here.
 
+> [!NOTE]
+> Capture the detail that would be easy to forget but useful to your future self.
+
 ## Takeaway
 
 What should a future reader remember?

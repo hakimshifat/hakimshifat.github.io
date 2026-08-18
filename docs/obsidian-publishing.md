@@ -42,6 +42,20 @@ For a friendlier label, use [[Nice - The Priority Scheduling Modification|proces
 
 Wiki links are converted to `/blog/<slug>/` links at build time. Standard Markdown links continue to work as usual.
 
+## Callouts
+
+Obsidian callouts are supported for notes, warnings, tips, and important insights:
+
+```md
+> [!TIP]
+> Keep the reusable technique or command here.
+
+> [!WARNING]
+> Explain a dangerous command or an important prerequisite.
+```
+
+They render as colored, labeled panels in the published article.
+
 ## Recommended note types
 
 Use `note` for a short observation or concept, `guide` for a reproducible tutorial, `writeup` for a CTF or security solution, and `project` for a detailed engineering case study.

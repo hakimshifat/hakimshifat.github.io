@@ -30,6 +30,19 @@ const { post, related } = Astro.props as BlogPageProps;
 const { Content } = await post.render();
 const wordCount = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
 const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
+const heroImage = post.data.heroImage?.trim() || undefined;
+const headingIds = new Map<string, number>();
+const headings = (post.body ?? '')
+  .split('\n')
+  .map((line) => line.match(/^(#{2,3})\s+(.+)$/))
+  .filter((match): match is RegExpMatchArray => Boolean(match))
+  .map((match) => {
+    const text = match[2].replace(/[`*_]/g, '').trim();
+    const baseId = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    const count = headingIds.get(baseId) ?? 0;
+    headingIds.set(baseId, count + 1);
+    return { level: match[1].length, text, id: count === 0 ? baseId : `${baseId}-${count}` };
+  });
 const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -42,7 +55,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 
   <main id="main-content" class="min-h-screen pt-32 pb-24">
     <div class="max-w-[800px] mx-auto px-6">
-      <div class="mb-12 reveal">
+      <header class="article-header mb-14 reveal">
         <a href="/blog" class="text-xs font-mono uppercase tracking-widest text-zinc-500 hover:text-blue-400 transition-colors mb-8 inline-block">
           ← Back to Archive
         </a>
@@ -52,11 +65,11 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
           </span>
           {post.data.series && <span class="text-zinc-500">Series: {post.data.series}</span>}
         </div>
-        <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-6">
+        <h1 class="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.08] mb-6">
           {post.data.title}
         </h1>
-        <p class="text-lg text-zinc-400 leading-relaxed mb-6">{post.data.description}</p>
-        <div class="flex flex-wrap items-center gap-3 text-sm font-mono text-zinc-400">
+        <p class="text-lg md:text-xl text-zinc-400 leading-relaxed mb-7 max-w-3xl">{post.data.description}</p>
+        <div class="flex flex-wrap items-center gap-3 text-xs font-mono text-zinc-400">
           <span>{formattedDate}</span>
           {post.data.updatedDate && (
             <>
@@ -67,11 +80,30 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
           <span>·</span>
           <span>{readingMinutes} min read</span>
           <span>·</span>
-          <span>{post.data.tags?.join(', ') || 'article'}</span>
+          <span>{post.data.tags?.join(' · ') || 'article'}</span>
         </div>
-      </div>
+        {heroImage?.startsWith('/images/') && (
+          <img src={heroImage} alt="" class="article-hero mt-10" loading="eager" />
+        )}
+      </header>
 
-      <article class="prose max-w-none reveal">
+      {headings.length > 2 && (
+        <nav class="article-toc reveal" aria-label="On this page">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <h2 class="text-xs font-mono uppercase tracking-[0.2em] text-zinc-500">On this page</h2>
+            <span class="text-[10px] font-mono text-zinc-600">{headings.length} sections</span>
+          </div>
+          <ol>
+            {headings.map((heading) => (
+              <li class={heading.level === 3 ? 'toc-subitem' : ''}>
+                <a href={`#${heading.id}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      <article class="prose article-body max-w-none reveal" aria-label="Article content">
         <Content />
       </article>
 
@@ -101,32 +133,354 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
   <Footer />
 </Layout>
 
+<script>
+  document.querySelectorAll('.article-body pre').forEach((pre) => {
+    if (pre.querySelector('.code-copy-button')) return;
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'code-copy-button';
+    button.textContent = 'Copy';
+    button.setAttribute('aria-label', 'Copy code to clipboard');
+
+    button.addEventListener('click', async () => {
+      const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+        button.textContent = 'Copied';
+        window.setTimeout(() => { button.textContent = 'Copy'; }, 1600);
+      } catch {
+        button.textContent = 'Select manually';
+        window.setTimeout(() => { button.textContent = 'Copy'; }, 1600);
+      }
+    });
+
+    pre.appendChild(button);
+  });
+</script>
+
 <style is:global>
-  /* Minimalist markdown styling overriding default browser styles */
-  .prose {
+  .article-header {
+    position: relative;
+  }
+
+  .article-header::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    left: -2rem;
+    width: 2px;
+    height: 5.5rem;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    opacity: 0.75;
+  }
+
+  .article-hero {
+    width: 100%;
+    max-height: 25rem;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.28);
+  }
+
+  .article-toc {
+    margin-bottom: 3rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 0.85rem;
+    background: linear-gradient(120deg, rgba(59, 130, 246, 0.07), rgba(24, 24, 27, 0.35));
+  }
+
+  .article-toc ol {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .article-toc li {
+    border-left: 1px solid var(--border);
+    padding-left: 0.85rem;
+  }
+
+  .article-toc .toc-subitem {
+    margin-left: 1rem;
+    font-size: 0.9em;
+  }
+
+  .article-toc a {
     color: var(--text-secondary);
-    line-height: 1.8;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease;
   }
-  .prose h1, .prose h2, .prose h3, .prose h4 {
+
+  .article-toc a:hover {
+    color: var(--accent-hover);
+  }
+
+  .article-body {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.9;
+  }
+
+  .article-body > * {
+    max-width: 68ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .article-body h1,
+  .article-body h2,
+  .article-body h3,
+  .article-body h4 {
     color: var(--text);
-    font-weight: 600;
-    margin-top: 2em;
-    margin-bottom: 1em;
-    line-height: 1.3;
+    font-weight: 650;
+    line-height: 1.25;
+    scroll-margin-top: 6rem;
   }
-  .prose h1 { font-size: 2.25em; }
-  .prose h2 { font-size: 1.5em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
-  .prose h3 { font-size: 1.25em; }
-  .prose p { margin-bottom: 1.5em; }
-  .prose a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
-  .prose a:hover { border-bottom-color: var(--accent); }
-  .prose strong { color: var(--text); font-weight: 600; }
-  .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; }
-  .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1.5em; }
-  .prose li { margin-bottom: 0.5em; }
-  .prose blockquote { border-left: 4px solid var(--border); padding-left: 1em; color: var(--text-muted); font-style: italic; margin: 2em 0; }
-  .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.875em; background: var(--bg-elevated); padding: 0.2em 0.4em; border-radius: 0.25em; color: var(--text); border: 1px solid var(--border); }
-  .prose pre { background: var(--bg-elevated) !important; padding: 1.25em; border-radius: 0.5em; overflow-x: auto; margin: 2em 0; border: 1px solid var(--border); }
-  .prose pre code { background: transparent; padding: 0; border: none; color: inherit; }
-  .prose img { border-radius: 0.5em; border: 1px solid var(--border); margin: 2em auto; display: block; max-width: 100%; height: auto; }
+
+  .article-body h1 {
+    font-size: 2.15em;
+    margin-top: 2.2em;
+    margin-bottom: 0.8em;
+  }
+
+  .article-body h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: 1.55em;
+    margin-top: 2.4em;
+    margin-bottom: 0.8em;
+    padding-bottom: 0.45em;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .article-body h2::before {
+    content: '#';
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7em;
+    opacity: 0.8;
+  }
+
+  .article-body h3 {
+    font-size: 1.25em;
+    margin-top: 1.8em;
+    margin-bottom: 0.65em;
+  }
+
+  .article-body p {
+    margin-bottom: 1.35em;
+  }
+
+  .article-body a {
+    color: var(--accent-hover);
+    text-decoration: underline;
+    text-decoration-color: rgba(96, 165, 250, 0.35);
+    text-underline-offset: 0.2em;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+
+  .article-body a:hover {
+    color: var(--text);
+    text-decoration-color: var(--accent-hover);
+  }
+
+  .article-body strong {
+    color: var(--text);
+    font-weight: 650;
+  }
+
+  .article-body ul,
+  .article-body ol {
+    margin-bottom: 1.5em;
+    padding-left: 1.5em;
+  }
+
+  .article-body li {
+    margin-bottom: 0.55em;
+    padding-left: 0.2em;
+  }
+
+  .article-body li::marker {
+    color: var(--accent);
+  }
+
+  .article-body blockquote {
+    margin: 2em auto;
+    padding: 1.1rem 1.35rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 0.75rem 0.75rem 0;
+    background: linear-gradient(100deg, rgba(59, 130, 246, 0.08), transparent);
+    color: var(--text-secondary);
+  }
+
+  .article-body blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  .article-body code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    color: #bfdbfe;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 0.18em 0.4em;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 0.35rem;
+  }
+
+  .article-body pre {
+    position: relative;
+    max-width: 78ch;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.85rem;
+    background: #111113 !important;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
+  }
+
+  .article-body pre code {
+    color: inherit;
+    background: transparent;
+    padding: 0;
+    border: none;
+    font-size: 0.82rem;
+    line-height: 1.75;
+  }
+
+  .article-body .code-copy-button {
+    position: absolute;
+    top: 0.7rem;
+    right: 0.7rem;
+    border: 1px solid var(--border-hover);
+    border-radius: 0.4rem;
+    background: rgba(24, 24, 27, 0.9);
+    color: var(--text-muted);
+    padding: 0.35rem 0.55rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .article-body .code-copy-button:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .article-body table {
+    width: 100%;
+    margin: 2rem auto;
+    border-collapse: collapse;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    font-size: 0.92rem;
+  }
+
+  .article-body th,
+  .article-body td {
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .article-body th {
+    color: var(--text);
+    background: var(--bg-elevated);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .article-body tr:last-child td {
+    border-bottom: none;
+  }
+
+  .article-body hr {
+    max-width: 68ch;
+    margin: 3rem auto;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .article-body img {
+    max-width: 100%;
+    height: auto;
+    margin: 2.2rem auto;
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: 0.85rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
+  }
+
+  .article-body .callout {
+    position: relative;
+    margin: 2rem auto;
+    padding: 2.2rem 1.35rem 1.15rem;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 0.75rem 0.75rem 0;
+    background: rgba(59, 130, 246, 0.07);
+  }
+
+  .article-body .callout::before {
+    content: attr(data-callout);
+    position: absolute;
+    top: 0.75rem;
+    left: 1.35rem;
+    color: var(--accent-hover);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .article-body .callout-note,
+  .article-body .callout-info {
+    border-left-color: #60a5fa;
+  }
+
+  .article-body .callout-tip {
+    border-left-color: #34d399;
+    background: rgba(16, 185, 129, 0.07);
+  }
+
+  .article-body .callout-warning,
+  .article-body .callout-caution {
+    border-left-color: #fbbf24;
+    background: rgba(245, 158, 11, 0.07);
+  }
+
+  .article-body .callout-danger,
+  .article-body .callout-error {
+    border-left-color: #fb7185;
+    background: rgba(244, 63, 94, 0.07);
+  }
+
+  @media (max-width: 640px) {
+    .article-header::before {
+      left: -0.8rem;
+    }
+
+    .article-body {
+      font-size: 1rem;
+    }
+
+    .article-body pre {
+      margin-left: -0.75rem;
+      margin-right: -0.75rem;
+      border-radius: 0.6rem;
+    }
+  }
 </style>

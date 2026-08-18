@@ -39,6 +39,11 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
             class="group p-6 border border-zinc-800 rounded-xl hover:border-zinc-700 hover:bg-zinc-900/30 transition-all duration-300 reveal cursor-pointer relative overflow-hidden h-full flex flex-col block"
           >
             <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            {post.data.heroImage?.trim().startsWith('/images/') && (
+              <div class="relative z-10 -mx-6 -mt-6 mb-5 h-36 overflow-hidden border-b border-zinc-800 bg-zinc-900">
+                <img src={post.data.heroImage.trim()} alt="" loading="lazy" class="h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100" />
+              </div>
+            )}
             <div class="relative z-10 flex flex-col flex-1">
               <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
                 <span class="text-[11px] font-mono uppercase tracking-wider text-blue-400 bg-blue-400/10 px-2.5 py-1 rounded-md border border-blue-400/20">
