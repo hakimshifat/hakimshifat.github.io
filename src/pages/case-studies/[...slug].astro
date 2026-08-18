@@ -18,79 +18,219 @@ export async function getStaticPaths() {
 
 const { study } = Astro.props as CaseStudyProps;
 const { Content } = await study.render();
+const data = study.data;
 ---
 
-<Layout title={`${study.data.title} Case Study | Abdul Hakim Shifat`} description={study.data.description}>
+<Layout title={`${data.title} Case Study | Abdul Hakim Shifat`} description={data.description}>
   <Navbar />
-  <main id="main-content" class="min-h-screen pt-32 pb-24">
-    <div class="max-w-[900px] mx-auto px-6">
-      <a href="/" class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-500 hover:text-blue-400 transition-colors reveal">
-        <span aria-hidden="true">←</span> Back to portfolio
-      </a>
+  <div id="case-reading-progress" aria-hidden="true"></div>
+  <main id="main-content" class="case-study-page">
+    <div class="case-study-container">
+      <a href="/" class="case-back reveal"><span aria-hidden="true">←</span> Back to portfolio</a>
 
-      <header class="case-study-header mt-12 mb-12 reveal">
-        <div class="flex flex-wrap items-center gap-3 mb-6">
-          <span class="text-[11px] font-mono uppercase tracking-[0.2em] text-blue-400 bg-blue-400/10 border border-blue-400/20 rounded-md px-2.5 py-1">{study.data.category}</span>
-          <span class="text-xs font-mono text-zinc-600">Case study</span>
+      <header class="case-hero reveal">
+        <div class="case-hero-copy">
+          <div class="case-eyebrow-row">
+            <span class="case-eyebrow">{data.eyebrow}</span>
+            <span class="case-index">CASE / {study.slug.toUpperCase()}</span>
+          </div>
+          <h1>{data.title}</h1>
+          <p class="case-lede">{data.description}</p>
+          <div class="case-meta-row" aria-label="Project metadata">
+            <div><span>Role</span><strong>{data.role}</strong></div>
+            <div><span>Period</span><strong>{data.year}</strong></div>
+            <div><span>Category</span><strong>{data.category}</strong></div>
+          </div>
+          <div class="case-actions">
+            <a href={data.repo} target="_blank" rel="noopener noreferrer" class="case-primary-action">View source repository <span aria-hidden="true">↗</span></a>
+            <span class="case-proof-note"><span class="case-proof-dot"></span> Read from the actual codebase</span>
+          </div>
         </div>
-        <h1 class="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-white mb-6">{study.data.title}</h1>
-        <p class="max-w-3xl text-lg md:text-xl leading-relaxed text-zinc-400 mb-8">{study.data.description}</p>
-        <div class="flex flex-wrap items-center gap-3">
-          <a href={study.data.repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white hover:bg-blue-500 transition-colors">
-            View source repository <span aria-hidden="true">↗</span>
-          </a>
-          <span class="text-xs font-mono text-zinc-500">Evidence-backed from the repository</span>
+
+        <div class:list={['case-visual', `case-visual-${data.visual}`]} aria-label={`${data.title} project visual`}>
+          {data.image ? (
+            <div class="case-image-frame">
+              <img src={data.image} alt={data.imageAlt || data.title} loading="eager" />
+              <span class="case-image-label">Repository artifact / visual reference</span>
+            </div>
+          ) : data.visual === 'pipeline' ? (
+            <div class="visual-pipeline">
+              <div class="visual-label">EVALUATION PIPELINE</div>
+              <div class="pipeline-node pipeline-node-source"><span>01</span> source artifacts</div>
+              <div class="pipeline-line"></div>
+              <div class="pipeline-node"><span>02</span> audit + manifest</div>
+              <div class="pipeline-line"></div>
+              <div class="pipeline-split"><div><span>D_POLICY</span></div><div><span>D_CAL</span></div><div><span>D_TEST_ADV</span></div></div>
+              <div class="pipeline-line"></div>
+              <div class="pipeline-result"><span class="result-mark">✓</span> frozen evidence</div>
+            </div>
+          ) : data.visual === 'camera' ? (
+            <div class="visual-camera">
+              <div class="visual-label">LOCAL CAMERA LOOP</div>
+              <div class="camera-frame"><div class="face-outline"><i></i><i></i><b></b></div><div class="hand-outline">✦</div><span class="camera-crosshair">+</span></div>
+              <div class="camera-readout"><span>FACE 72%</span><span>HAND 28%</span><span class="readout-good">MATCH 91</span></div>
+              <div class="camera-controls"><kbd>[</kbd><kbd>T</kbd><kbd>]</kbd><span>teach active pose</span></div>
+            </div>
+          ) : data.visual === 'scanner' ? (
+            <div class="visual-scanner">
+              <div class="visual-label">STATIC SCAN / OFFLINE</div>
+              <div class="scanner-file"><span class="file-icon">⌁</span><span>PKGBUILD</span><span class="file-state">INSPECTING</span></div>
+              <div class="scan-lines"><span style="width: 88%"></span><span style="width: 64%"></span><span style="width: 76%"></span><span style="width: 42%"></span></div>
+              <div class="scanner-findings"><div><b>R-014</b><span>mutable source</span><em>review</em></div><div><b>R-022</b><span>dynamic exec</span><em class="finding-high">block</em></div><div><b>R-031</b><span>checksum rule</span><em class="finding-pass">pass</em></div></div>
+              <div class="scanner-footer"><span>coverage: explicit</span><span>exit: 2</span></div>
+            </div>
+          ) : data.visual === 'web' ? (
+            <div class="visual-web">
+              <div class="visual-label">SECURE INFORMATION FLOW</div>
+              <div class="web-layer web-client"><span>01</span><b>React client</b><small>upload · auth · extract</small></div>
+              <div class="web-connector">↓</div>
+              <div class="web-layer web-api"><span>02</span><b>Express API</b><small>session · stego · logs</small></div>
+              <div class="web-connector">↓</div>
+              <div class="web-bottom"><div class="web-layer web-db"><span>03</span><b>PostgreSQL</b><small>Prisma sessions</small></div><div class="web-layer web-files"><span>04</span><b>PNG output</b><small>local storage</small></div></div>
+            </div>
+          ) : data.visual === 'boot' ? (
+            <div class="visual-boot">
+              <div class="visual-label">BOOT HANDOFF / 0x007C00</div>
+              <div class="boot-row"><div><strong>BIOS</strong><small>POST + read sector 0</small></div><span>→</span><div class="boot-active"><strong>512 B</strong><small>real-mode setup</small></div><span>→</span><div><strong>KERNEL</strong><small>later stage</small></div></div>
+              <div class="boot-memory"><span>0x0000</span><i></i><b>0x007C00</b><i></i><span>0xFFFFF</span></div>
+              <div class="boot-signature"><span>sector signature</span><strong>55 AA</strong><span>bootable</span></div>
+            </div>
+          ) : (
+            <div class="visual-terminal">
+              <div class="visual-label">YTUI MUSIC / READY</div>
+              <div class="terminal-command"><span>$</span> search lo-fi beats_</div>
+              <div class="terminal-result active"><span>01</span><b>lofi hip hop radio</b><em>03:21:44</em></div>
+              <div class="terminal-result"><span>02</span><b>late night coding mix</b><em>01:12:08</em></div>
+              <div class="terminal-result"><span>03</span><b>ambient terminal session</b><em>02:04:31</em></div>
+              <div class="terminal-status"><kbd>ENTER</kbd> play <kbd>j/k</kbd> navigate <kbd>SPACE</kbd> pause</div>
+            </div>
+          )}
         </div>
       </header>
 
-      <section class="case-study-facts grid sm:grid-cols-2 gap-4 mb-14 reveal" aria-label="Case study facts">
-        <div class="rounded-xl border border-zinc-800 bg-zinc-900/30 p-5">
-          <p class="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600 mb-3">Repository</p>
-          <a href={study.data.repo} target="_blank" rel="noopener noreferrer" class="break-all text-sm text-zinc-300 hover:text-blue-400 transition-colors">{study.data.repo.replace('https://github.com/', '')}</a>
-        </div>
-        <div class="rounded-xl border border-zinc-800 bg-zinc-900/30 p-5">
-          <p class="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600 mb-3">Stack</p>
-          <div class="flex flex-wrap gap-2">
-            {study.data.stack.map((item) => <span class="rounded-md bg-zinc-800/70 px-2.5 py-1 text-[11px] font-mono uppercase tracking-wider text-zinc-400">{item}</span>)}
-          </div>
-        </div>
+      <section class="case-metrics reveal" aria-label="Project signals">
+        {data.metrics.map((metric) => (
+          <div class="case-metric"><span>{metric.label}</span><strong>{metric.value}</strong><small>{metric.detail}</small></div>
+        ))}
       </section>
 
-      <article class="prose article-body case-study-body max-w-none reveal" aria-label={`${study.data.title} case study`}>
-        <Content />
-      </article>
+      <section class="case-brief-grid reveal" aria-label="Case study brief">
+        <div class="case-brief-card"><span class="case-card-label">The problem</span><p>{data.problem}</p></div>
+        <div class="case-brief-card case-brief-card-accent"><span class="case-card-label">The outcome</span><p>{data.outcome}</p></div>
+      </section>
+
+      <div class="case-content-layout">
+        <aside class="case-sidebar reveal">
+          <div class="case-sidebar-block">
+            <span class="case-card-label">Stack</span>
+            <div class="case-stack">{data.stack.map((item) => <span>{item}</span>)}</div>
+          </div>
+          <div class="case-sidebar-block case-sidebar-note">
+            <span class="case-card-label">Reading note</span>
+            <p>This page focuses on the decisions, boundaries, and repository evidence behind the project—not just its feature list.</p>
+          </div>
+        </aside>
+        <article class="case-study-body reveal" aria-label={`${data.title} case study`}>
+          <Content />
+        </article>
+      </div>
+
+      <footer class="case-footer reveal">
+        <div><span class="case-card-label">Continue exploring</span><h2>See the implementation in context.</h2></div>
+        <a href={data.repo} target="_blank" rel="noopener noreferrer" class="case-primary-action">Open repository <span aria-hidden="true">↗</span></a>
+      </footer>
     </div>
   </main>
   <Footer />
 </Layout>
 
-<style is:global>
-  .case-study-header::after {
-    display: block;
-    width: 4rem;
-    height: 2px;
-    margin-top: 3rem;
-    content: '';
-    background: var(--accent);
-  }
+<script>
+  const progress = document.getElementById('case-reading-progress');
+  const article = document.querySelector('.case-study-body');
+  const updateProgress = () => {
+    if (!progress || !article) return;
+    const bounds = article.getBoundingClientRect();
+    const height = article.scrollHeight - window.innerHeight;
+    const distance = Math.max(0, -bounds.top);
+    progress.style.width = `${height > 0 ? Math.min(100, (distance / height) * 100) : 0}%`;
+  };
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+  document.querySelectorAll('.case-study-body pre').forEach((pre) => {
+    if (pre.querySelector('.case-copy')) return;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'case-copy';
+    button.textContent = 'Copy';
+    button.addEventListener('click', async () => {
+      const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+        button.textContent = 'Copied';
+        window.setTimeout(() => { button.textContent = 'Copy'; }, 1500);
+      } catch {
+        button.textContent = 'Select manually';
+      }
+    });
+    pre.appendChild(button);
+  });
+</script>
 
-  .case-study-body {
-    border-top: 1px solid var(--border);
-    padding-top: 3rem;
-  }
-
-  .case-study-facts > div {
-    transition: border-color 0.25s ease, transform 0.25s ease;
-  }
-
-  .case-study-facts > div:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .case-study-facts > div:hover {
-      transform: none;
-    }
-  }
+<style is="global">
+  .case-study-page { min-height: 100vh; padding: 8.5rem 0 7rem; background: var(--bg); }
+  .case-study-container { width: min(1160px, calc(100% - 3rem)); margin: 0 auto; }
+  #case-reading-progress { position: fixed; inset: 0 auto auto 0; z-index: 70; width: 0; height: 2px; background: var(--accent); box-shadow: 0 0 16px rgba(59,130,246,.6); transition: width .08s linear; }
+  .case-back { display: inline-flex; align-items: center; gap: .55rem; color: var(--muted); font: 11px/1 var(--font-mono); letter-spacing: .16em; text-transform: uppercase; transition: color .2s ease; }
+  .case-back:hover { color: var(--accent); }
+  .case-hero { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(360px, .94fr); gap: 4.5rem; align-items: center; margin-top: 3.25rem; }
+  .case-eyebrow-row { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; margin-bottom: 1.65rem; }
+  .case-eyebrow, .case-index, .case-card-label, .visual-label { font: 10px/1.2 var(--font-mono); letter-spacing: .2em; text-transform: uppercase; }
+  .case-eyebrow { color: var(--accent); }
+  .case-index { color: var(--muted-2); }
+  .case-hero h1 { max-width: 720px; margin: 0; color: var(--text); font-size: clamp(2.8rem, 7vw, 6.2rem); line-height: .95; letter-spacing: -.065em; }
+  .case-lede { max-width: 680px; margin: 1.65rem 0 0; color: var(--muted); font-size: clamp(1.05rem, 1.8vw, 1.3rem); line-height: 1.7; }
+  .case-meta-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2.4rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+  .case-meta-row div { display: grid; gap: .4rem; }
+  .case-meta-row span { color: var(--muted-2); font: 10px/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; }
+  .case-meta-row strong { color: var(--text); font-size: .82rem; line-height: 1.45; font-weight: 500; }
+  .case-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: 2rem; }
+  .case-primary-action { display: inline-flex; align-items: center; gap: .7rem; padding: .8rem 1rem; border: 1px solid rgba(59,130,246,.55); border-radius: .55rem; background: rgba(59,130,246,.12); color: #dbeafe; font: 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+  .case-primary-action:hover { border-color: var(--accent); background: rgba(59,130,246,.2); transform: translateY(-2px); }
+  .case-proof-note { display: inline-flex; align-items: center; gap: .45rem; color: var(--muted-2); font: 10px/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+  .case-proof-dot { width: 5px; height: 5px; border-radius: 999px; background: #4ade80; box-shadow: 0 0 10px rgba(74,222,128,.6); }
+  .case-visual { min-height: 420px; position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 1rem; background: radial-gradient(circle at 75% 20%, rgba(59,130,246,.12), transparent 38%), #0d0d10; box-shadow: 0 30px 80px rgba(0,0,0,.26); }
+  .case-visual::before { position: absolute; inset: 0; content: ''; opacity: .45; background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px); background-size: 32px 32px; mask-image: linear-gradient(135deg, black, transparent 80%); }
+  .case-visual > * { position: relative; z-index: 1; }
+  .visual-label { color: var(--muted-2); }
+  .visual-pipeline, .visual-camera, .visual-scanner, .visual-web, .visual-boot, .visual-terminal { display: flex; flex-direction: column; gap: 1rem; height: 100%; padding: 2rem; }
+  .pipeline-node { display: flex; justify-content: space-between; align-items: center; width: 82%; padding: .95rem 1rem; border: 1px solid #27272a; border-radius: .45rem; background: rgba(24,24,27,.85); color: #d4d4d8; font: 11px/1.3 var(--font-mono); }
+  .pipeline-node span { color: var(--accent); }
+  .pipeline-node-source { margin-top: 1rem; }
+  .pipeline-line { width: 1px; height: 1.2rem; margin-left: 1.2rem; background: #3f3f46; }
+  .pipeline-split { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; width: 100%; }
+  .pipeline-split div { min-height: 4.2rem; display: grid; place-items: center; border: 1px solid rgba(59,130,246,.35); border-radius: .45rem; background: rgba(59,130,246,.08); color: #93c5fd; font: 9px/1.2 var(--font-mono); text-align: center; }
+  .pipeline-result { display: flex; align-items: center; gap: .55rem; margin-top: auto; color: #a7f3d0; font: 11px/1.3 var(--font-mono); }
+  .result-mark { display: grid; width: 1.4rem; height: 1.4rem; place-items: center; border: 1px solid #34d399; border-radius: 50%; }
+  .visual-camera { gap: .8rem; }
+  .camera-frame { position: relative; display: grid; min-height: 255px; place-items: center; margin-top: .5rem; border: 1px solid #334155; border-radius: .65rem; background: radial-gradient(circle at 50% 40%, rgba(59,130,246,.16), transparent 28%), linear-gradient(150deg, #111827, #09090b 65%); }
+  .face-outline { position: relative; width: 125px; height: 160px; border: 1px solid rgba(147,197,253,.75); border-radius: 48% 48% 44% 44% / 42% 42% 58% 58%; }
+  .face-outline i { position: absolute; top: 62px; width: 14px; height: 6px; border-top: 1px solid #bfdbfe; }
+  .face-outline i:first-child { left: 25px; }.face-outline i:nth-child(2) { right: 25px; }
+  .face-outline b { position: absolute; bottom: 30px; left: 42px; width: 40px; height: 14px; border-bottom: 1px solid #60a5fa; border-radius: 50%; }
+  .hand-outline { position: absolute; right: 19%; bottom: 22%; color: #60a5fa; font-size: 3rem; transform: rotate(-16deg); }
+  .camera-crosshair { position: absolute; top: 13%; left: 12%; color: rgba(147,197,253,.4); font-size: 1.6rem; }
+  .camera-readout, .camera-controls, .scanner-footer { display: flex; justify-content: space-between; gap: .75rem; color: var(--muted-2); font: 9px/1.3 var(--font-mono); letter-spacing: .08em; }
+  .readout-good { color: #86efac; }.camera-controls { justify-content: flex-start; align-items: center; }.camera-controls kbd, .terminal-status kbd { padding: .22rem .35rem; border: 1px solid #3f3f46; border-radius: .25rem; color: #d4d4d8; }
+  .visual-scanner { gap: 1rem; }.scanner-file { display: grid; grid-template-columns: auto 1fr auto; gap: .65rem; align-items: center; padding: .9rem; border: 1px solid #27272a; border-radius: .45rem; color: #e4e4e7; font: 11px/1.3 var(--font-mono); }.file-icon { color: var(--accent); font-size: 1.3rem; }.file-state { color: #fbbf24; font-size: 9px; }.scan-lines { display: grid; gap: .55rem; padding: .55rem 0; }.scan-lines span { display: block; height: 3px; border-radius: 99px; background: linear-gradient(90deg, #2563eb, rgba(37,99,235,.08)); }.scanner-findings { display: grid; gap: .5rem; }.scanner-findings div { display: grid; grid-template-columns: 3.5rem 1fr auto; gap: .55rem; align-items: center; padding: .65rem .7rem; border-left: 2px solid #f59e0b; background: rgba(245,158,11,.06); font: 10px/1.2 var(--font-mono); }.scanner-findings b { color: #fcd34d; }.scanner-findings span { color: #a1a1aa; }.scanner-findings em { color: #fbbf24; font-style: normal; text-transform: uppercase; }.scanner-findings .finding-high { color: #f87171; }.scanner-findings .finding-pass { color: #86efac; }.scanner-footer { margin-top: auto; }
+  .visual-web { gap: .75rem; }.web-layer { display: grid; grid-template-columns: 2rem 1fr; column-gap: .6rem; padding: .85rem; border: 1px solid #334155; border-radius: .45rem; background: rgba(15,23,42,.78); }.web-layer span { grid-row: span 2; color: var(--accent); font: 10px/1.2 var(--font-mono); }.web-layer b { color: #e0f2fe; font: 12px/1.2 var(--font-mono); }.web-layer small { margin-top: .35rem; color: #94a3b8; font: 10px/1.2 var(--font-mono); }.web-connector { padding-left: 1.1rem; color: #60a5fa; font: 1rem/1 var(--font-mono); }.web-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
+  .visual-boot { justify-content: center; }.boot-row { display: grid; grid-template-columns: 1fr auto 1.2fr auto 1fr; gap: .55rem; align-items: center; margin-top: 2rem; }.boot-row > div { min-height: 7rem; display: flex; flex-direction: column; justify-content: center; gap: .6rem; padding: .7rem; border: 1px solid #27272a; border-radius: .5rem; background: rgba(24,24,27,.86); }.boot-row strong { color: #e4e4e7; font: 13px/1 var(--font-mono); }.boot-row small { color: #71717a; font: 9px/1.4 var(--font-mono); }.boot-row > span { color: #60a5fa; font-size: 1.2rem; }.boot-active { border-color: rgba(59,130,246,.65) !important; background: rgba(59,130,246,.1) !important; }.boot-active strong { color: #93c5fd; }.boot-memory { display: flex; align-items: center; gap: .5rem; margin-top: auto; color: #71717a; font: 9px/1 var(--font-mono); }.boot-memory i { height: 1px; flex: 1; background: #3f3f46; }.boot-memory b { color: #93c5fd; font-weight: 400; }.boot-signature { display: flex; align-items: center; gap: .8rem; color: #71717a; font: 9px/1 var(--font-mono); }.boot-signature strong { color: #86efac; font-size: 1.1rem; letter-spacing: .12em; }
+  .visual-terminal { gap: .8rem; background: rgba(0,0,0,.25); }.terminal-command { padding: .8rem; border-bottom: 1px solid #27272a; color: #d4d4d8; font: 12px/1.3 var(--font-mono); }.terminal-command span { color: #60a5fa; }.terminal-result { display: grid; grid-template-columns: 2rem 1fr auto; gap: .6rem; align-items: center; padding: .75rem; border: 1px solid transparent; color: #a1a1aa; font: 10px/1.3 var(--font-mono); }.terminal-result span { color: #52525b; }.terminal-result b { color: #d4d4d8; font-weight: 400; }.terminal-result em { color: #52525b; font-style: normal; }.terminal-result.active { border-color: rgba(59,130,246,.55); background: rgba(59,130,246,.09); }.terminal-result.active span, .terminal-result.active b { color: #93c5fd; }.terminal-status { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .65rem; margin-top: auto; color: #71717a; font: 9px/1.3 var(--font-mono); }
+  .case-metrics { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 5rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }.case-metric { display: grid; gap: .55rem; min-height: 150px; padding: 1.35rem 1.5rem; border-right: 1px solid var(--border); }.case-metric:last-child { border-right: 0; }.case-metric span { color: var(--muted-2); font: 10px/1.2 var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }.case-metric strong { color: var(--text); font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1; letter-spacing: -.04em; }.case-metric small { max-width: 250px; color: var(--muted); font-size: .76rem; line-height: 1.55; }
+  .case-brief-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }.case-brief-card { min-height: 165px; padding: 1.5rem; border: 1px solid var(--border); border-radius: .75rem; background: rgba(24,24,27,.28); }.case-brief-card-accent { border-color: rgba(59,130,246,.35); background: linear-gradient(145deg, rgba(59,130,246,.1), transparent 70%); }.case-card-label { display: block; color: var(--muted-2); }.case-brief-card p { max-width: 48rem; margin: .85rem 0 0; color: #d4d4d8; font-size: 1rem; line-height: 1.7; }
+  .case-content-layout { display: grid; grid-template-columns: 210px minmax(0, 760px); gap: 4.5rem; align-items: start; margin-top: 5.5rem; }.case-sidebar { position: sticky; top: 7rem; display: grid; gap: 2rem; }.case-sidebar-block { padding-top: .8rem; border-top: 1px solid var(--border); }.case-stack { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1rem; }.case-stack span { padding: .35rem .5rem; border: 1px solid var(--border); border-radius: .3rem; color: #a1a1aa; font: 9px/1.2 var(--font-mono); }.case-sidebar-note p { margin: .8rem 0 0; color: var(--muted); font-size: .78rem; line-height: 1.6; }
+  .case-study-body { min-width: 0; color: #d4d4d8; font-size: 1.03rem; line-height: 1.85; }.case-study-body > :first-child { margin-top: 0; }.case-study-body h2 { position: relative; margin: 3.5rem 0 1rem; padding-top: 1.25rem; border-top: 1px solid var(--border); color: var(--text); font-size: clamp(1.65rem, 3vw, 2.35rem); line-height: 1.1; letter-spacing: -.04em; }.case-study-body h2::before { position: absolute; top: -1px; left: 0; width: 2.5rem; height: 2px; content: ''; background: var(--accent); }.case-study-body h3 { margin: 2.2rem 0 .65rem; color: #f4f4f5; font-size: 1.25rem; line-height: 1.25; }.case-study-body p { margin: 1.1rem 0; }.case-study-body a { color: #93c5fd; text-decoration: underline; text-decoration-color: rgba(147,197,253,.35); text-underline-offset: .18em; }.case-study-body a:hover { color: white; }.case-study-body strong { color: #f4f4f5; font-weight: 600; }.case-study-body code { padding: .15rem .35rem; border: 1px solid #27272a; border-radius: .25rem; background: #18181b; color: #bfdbfe; font: .86em/1.2 var(--font-mono); }.case-study-body pre { position: relative; overflow-x: auto; margin: 1.5rem 0; padding: 1.25rem; border: 1px solid #27272a; border-radius: .55rem; background: #09090b; box-shadow: inset 3px 0 0 rgba(59,130,246,.35); }.case-study-body pre code { padding: 0; border: 0; background: transparent; color: #d4d4d8; font-size: .82rem; line-height: 1.7; }.case-copy { position: absolute; top: .65rem; right: .65rem; padding: .3rem .45rem; border: 1px solid #3f3f46; border-radius: .25rem; background: #18181b; color: #a1a1aa; cursor: pointer; font: 9px/1 var(--font-mono); }.case-copy:hover { color: white; border-color: #71717a; }.case-study-body blockquote { margin: 1.5rem 0; padding: .9rem 1.1rem; border-left: 2px solid var(--accent); background: rgba(59,130,246,.07); color: #bfdbfe; }.case-study-body blockquote p { margin: .35rem 0; }.case-study-body ul, .case-study-body ol { margin: 1rem 0 1.25rem; padding-left: 1.3rem; }.case-study-body li { margin: .35rem 0; padding-left: .25rem; }.case-study-body li::marker { color: var(--accent); }.case-study-body table { width: 100%; margin: 1.5rem 0; border-collapse: collapse; font-size: .86rem; line-height: 1.5; }.case-study-body th { color: var(--muted-2); font: 10px/1.2 var(--font-mono); letter-spacing: .12em; text-align: left; text-transform: uppercase; }.case-study-body th, .case-study-body td { padding: .8rem .7rem; border-bottom: 1px solid var(--border); vertical-align: top; }.case-study-body td { color: #b4b4ba; }.case-study-body tr:hover td { color: #e4e4e7; background: rgba(255,255,255,.018); }.case-study-body hr { margin: 3rem 0; border: 0; border-top: 1px solid var(--border); }.case-study-body img { width: 100%; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: .65rem; }
+  .case-footer { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin: 6rem 0 0; padding: 2rem 0 0; border-top: 1px solid var(--border); }.case-footer h2 { margin: .7rem 0 0; color: var(--text); font-size: clamp(1.5rem, 3vw, 2.4rem); line-height: 1; letter-spacing: -.04em; }
+  @media (max-width: 900px) { .case-hero { grid-template-columns: 1fr; gap: 3rem; }.case-visual { min-height: 380px; }.case-content-layout { grid-template-columns: 1fr; gap: 2rem; }.case-sidebar { position: static; grid-template-columns: 1fr 1fr; }.case-sidebar-note { border-left: 1px solid var(--border); padding-left: 1.2rem; } }
+  @media (max-width: 640px) { .case-study-page { padding-top: 7rem; }.case-study-container { width: min(100% - 2rem, 1160px); }.case-hero h1 { font-size: clamp(2.6rem, 15vw, 4.5rem); }.case-meta-row, .case-metrics, .case-brief-grid, .case-sidebar { grid-template-columns: 1fr; }.case-metric { min-height: auto; border-right: 0; border-bottom: 1px solid var(--border); }.case-metric:last-child { border-bottom: 0; }.case-visual { min-height: 350px; }.visual-pipeline, .visual-camera, .visual-scanner, .visual-web, .visual-boot, .visual-terminal { padding: 1.2rem; }.pipeline-split { gap: .3rem; }.pipeline-split div { font-size: 8px; }.boot-row { gap: .25rem; }.boot-row > span { font-size: .8rem; }.boot-row > div { min-height: 6rem; padding: .45rem; }.boot-row strong { font-size: 10px; }.boot-row small { font-size: 8px; }.case-footer { flex-direction: column; align-items: start; }.case-study-body { font-size: .98rem; }.case-study-body table { display: block; overflow-x: auto; white-space: nowrap; } }
+  @media (prefers-reduced-motion: reduce) { .case-primary-action:hover { transform: none; } }
 </style>

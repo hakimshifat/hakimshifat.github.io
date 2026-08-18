@@ -1,50 +1,115 @@
 ---
 title: aurscan
 description: A local, CLI-first, evidence-based scanner for Arch Linux AUR recipes that analyzes package metadata and commands without executing repository content.
+eyebrow: DEFENSIVE CLI / STATIC PACKAGE ANALYSIS
 repo: https://github.com/hakimshifat/aurscan
-category: Security Tooling
+category: Security tooling
+role: Security tool builder · parser, policy, and reporting layers
+year: 2026
+problem: Reviewing an AUR recipe often means trusting shell-shaped metadata before you know what it will do, while dynamic execution is exactly the wrong first step for untrusted package content.
+outcome: A bounded read-only scanner that turns PKGBUILD behavior, source integrity, metadata mismatches, and uncertainty into evidence-rich terminal, JSON, and SARIF reports.
+visual: scanner
 stack:
-  - Python
+  - Python 3.12
   - Arch Linux
-  - Static Analysis
-  - CLI
+  - Static analysis
   - SARIF
+  - Tree-sitter path
+metrics:
+  - label: Default behavior
+    value: Never execute
+    detail: The static path does not source, import, build, or install scanned recipes.
+  - label: Release slice
+    value: 0.1.0
+    detail: First complete vertical slice from local traversal to policy report.
+  - label: Exit contract
+    value: 0–5
+    detail: Stable results for pass-with-notes, review, block, input, acquisition, and parser failures.
 featured: true
 draft: false
 ---
 
-## What it is
+## Scan first. Run never.
 
-`aurscan` is a read-only scanner for Arch Linux AUR package recipes. It inspects `PKGBUILD`, `.install`, `.SRCINFO`, source declarations, and recipe commands, then produces a risk assessment with explicit severity, confidence, evidence, and coverage.
+AUR recipes are small files, but they are not harmless text. `PKGBUILD` and `.install` can contain shell behavior, mutable sources, lifecycle hooks, privilege operations, and credential-bearing URLs. The safest first move is therefore not “build it in a sandbox”; it is **inspect the recipe as an untrusted artifact and preserve the uncertainty you cannot resolve**.
+
+That is the product boundary of `aurscan`. A successful scan is not a safety certification. It is a decision-support report with explicit evidence, confidence, and coverage.
+
+> [!WARNING]
+> Unresolved Bash behavior is reported as incomplete coverage rather than treated as benign. The scanner’s most important feature is the operation it refuses to perform.
+
+## From checkout to decision
+
+```text
+local package checkout
+          │
+          ▼
+bounded traversal + file hashes
+          │
+          ├── PKGBUILD / .install ──► conservative Bash inspection
+          ├── .SRCINFO             ──► declarative metadata parser
+          └── sources + checksums   ──► integrity and URL rules
+                                      │
+                                      ▼
+                 finding(rule, severity, confidence, location)
+                                      │
+                    redaction + deterministic policy decision
+                                      │
+                 terminal report · JSON · SARIF · stable exit code
+```
+
+The scanner reads `PKGBUILD`, `.install`, `.SRCINFO`, declared sources, and recipe commands. It bounds repository and file sizes, rejects symlinked input files, sanitizes terminal-control characters, and redacts credential-like URL values before they reach a report.
 
 ## What I built
 
-The parser layer includes a bounded Bash inspection path, declarative `.SRCINFO` parsing, recipe extraction, checksum collection, and mismatch detection between `PKGBUILD` literals and generated metadata. The scanner refuses symlinked input files and applies size and line limits before analysis.
+The implementation is organized as a vertical slice rather than a collection of disconnected checks.
 
-The policy layer models findings with severity and confidence, evaluates blocking decisions using a configurable threshold, and emits stable exit codes. The reporting layer renders terminal, JSON, and SARIF output so the same evidence can be used interactively, in automation, or inside code-scanning workflows.
+| Layer | Repository surface | Result |
+| --- | --- | --- |
+| Input boundary | Local traversal, size limits, symlink rejection | A bounded set of files to inspect. |
+| Parsing | `recipe.py`, `srcinfo.py`, conservative Bash path | Structured package and command facts without shell evaluation. |
+| Rules | Source, checksum, URL, lifecycle, privilege, persistence, and payload checks | Stable findings with evidence locations. |
+| Policy | `policy/evaluator.py` | `pass_with_notes`, `review`, or `block` decisions. |
+| Reporting | Terminal, JSON, and SARIF renderers | Human review and CI/code-scanning integration. |
+| Hygiene | `redaction.py` | Safer evidence strings and sanitized output. |
 
-The redaction layer sanitizes terminal-control characters and removes credential-like values from evidence before they reach reports. The repository also includes service modules for AUR RPC, hardened Git retrieval, OSV identity lookup, and read-only pacman inventory.
+A finding carries more than a severity label. The model includes a stable rule ID, confidence, evidence location, remediation text, and fingerprint. That makes repeated scans comparable and gives a reviewer something better than “high risk” with no path back to the source line.
 
-## Engineering decisions
+## The CLI is designed for a review loop
 
-The default static path never sources, evaluates, imports, builds, or installs the scanned recipe. Unresolved Bash behavior is reported as incomplete coverage rather than assumed benign. This creates a safer boundary for analyzing untrusted package recipes.
+```bash
+aurscan scan --local ./package --offline --format terminal
+aurscan scan --local ./package --format json --output report.json
+aurscan scan --local ./package --format sarif --output report.sarif
+```
 
-The scanner is intentionally evidence-based rather than a safety certification. A finding includes a stable rule ID, severity, confidence, evidence location, remediation, and fingerprint. The project also makes limitations explicit: static Bash analysis cannot determine every runtime behavior, and a pinned source can still contain malicious code.
+Exit codes are part of the interface: `0` for pass-with-notes, `1` for review, `2` for block, `3` for invalid input or configuration, `4` for acquisition failure, and `5` for parser or internal failure. This turns the scanner into something a developer can place before a build step without scraping human-readable output.
 
-## Why it matters
+The exact AUR RPC client, hardened Git retrieval, OSV identity adapter, and read-only pacman inventory are service modules around the local-first core. Network acquisition is explicit; the default safety path does not need it.
 
-`aurscan` demonstrates security tooling that favors conservative analysis, explicit uncertainty, bounded input handling, and machine-readable reports. It is a strong example of combining Linux ecosystem knowledge with practical defensive engineering.
+## Why the “never execute” invariant changes the design
 
-## Evidence
+The scanner cannot use the convenience of shell evaluation to understand every dynamic branch. Instead, uncertainty is a first-class output. Static Bash inspection can identify dangerous shapes—download-to-execution pipelines, dynamic evaluation, privilege operations, sensitive filesystem writes, persistence hooks, encoded payloads—but it cannot prove intent or fully predict runtime behavior.
 
-- `src/aurscan/parsing/bash_ast.py` performs bounded static Bash inspection.
-- `src/aurscan/parsing/recipe.py` parses package recipes, sources, checksums, and metadata mismatches.
-- `src/aurscan/parsing/srcinfo.py` treats `.SRCINFO` as data without invoking a shell.
+That limitation is honest and useful. It prevents a green result from meaning “we failed to understand this script, so it must be safe.”
+
+## Evidence map
+
+- `src/aurscan/scanner.py` coordinates the bounded repository scan.
+- `src/aurscan/parsing/bash_ast.py` performs conservative command inspection.
+- `src/aurscan/parsing/recipe.py` parses sources, checksums, and package metadata.
+- `src/aurscan/parsing/srcinfo.py` treats `.SRCINFO` as data rather than executing it.
 - `src/aurscan/policy/evaluator.py` maps findings to policy decisions and exit codes.
-- `src/aurscan/report/renderers.py` emits JSON and SARIF reports.
-- `src/aurscan/redaction.py` sanitizes and redacts report evidence.
-- `tests/unit/` covers installation, scanning, and service behavior.
+- `src/aurscan/report/renderers.py` emits terminal, JSON, and SARIF formats.
+- `src/aurscan/redaction.py` sanitizes and redacts evidence values.
+- `tests/unit/` covers installation, scanner behavior, and service modules.
 
-## Limitations
+## Status and limits
 
-The current release does not dynamically build or install packages. Full dependency graphs, history diffs, and installed-package dashboard workflows remain separate milestones. The tool reports evidence and coverage; it does not certify that a package is safe.
+Version `0.1.0` implements the first complete vertical slice: local traversal, hashing, `.SRCINFO` parsing, conservative Bash inspection, source and behavior rules, deterministic policy, multiple report formats, and a read-only inventory adapter. Full dependency graphs, history diffs, installed-package orchestration, and dynamic builds remain out of scope for this release.
+
+A pinned checksum binds bytes to a recipe, not to benign intent. A pinned Git commit can still contain malicious code, and advisory databases are incomplete. `aurscan` reports evidence, confidence, and coverage; it does not certify a package.
+
+## Repository
+
+[View the source repository →](https://github.com/hakimshifat/aurscan)
