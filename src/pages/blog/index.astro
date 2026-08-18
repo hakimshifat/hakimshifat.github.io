@@ -13,18 +13,6 @@ const tagCounts = posts.flatMap((post) => post.data.tags).reduce<Record<string, 
 }, {});
 const topTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
 const types = Array.from(new Set(posts.map((post) => post.data.type))).sort();
-const graphNodes = posts.map((post, index) => ({
-  slug: post.slug,
-  title: post.data.title,
-  x: 82 + (index % 3) * 220,
-  y: 54 + Math.floor(index / 3) * 104,
-  tags: post.data.tags,
-}));
-const graphEdges = graphNodes.flatMap((from, index) => graphNodes.slice(index + 1).flatMap((to) => {
-  const shared = from.tags.filter((tag) => to.tags.includes(tag));
-  return shared.length > 0 ? [{ from, to }] : [];
-}));
-const graphHeight = Math.max(210, Math.ceil(graphNodes.length / 3) * 104 + 44);
 ---
 
 <Layout title="Archive | Abdul Hakim Shifat">
@@ -65,33 +53,6 @@ const graphHeight = Math.max(210, Math.ceil(graphNodes.length / 3) * 104 + 44);
           {topTags.map(([tag, count]) => (
             <button type="button" data-filter={tag} class="archive-filter rounded-md border border-zinc-800 px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-zinc-500 transition-colors hover:border-zinc-700 hover:text-zinc-300">#{tag} <span class="text-zinc-600">{count}</span></button>
           ))}
-        </div>
-      </section>
-
-      <section class="archive-graph mb-12 reveal" aria-labelledby="knowledge-graph-title">
-        <div class="flex items-center justify-between gap-4 mb-4">
-          <div>
-            <h2 id="knowledge-graph-title" class="text-xs font-mono uppercase tracking-[0.2em] text-zinc-500">Knowledge graph</h2>
-            <p class="mt-2 text-sm text-zinc-500">Notes are connected when they share a topic. Click a node to open it.</p>
-          </div>
-          <span class="hidden sm:inline text-[10px] font-mono uppercase tracking-wider text-zinc-600">{graphEdges.length} connections</span>
-        </div>
-        <div class="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/20">
-          <svg class="knowledge-graph min-w-[760px] w-full" viewBox={`0 0 760 ${graphHeight}`} role="img" aria-label="Knowledge graph of published notes">
-            <g class="graph-edges" aria-hidden="true">
-              {graphEdges.map(({ from, to }) => (
-                <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} />
-              ))}
-            </g>
-            <g class="graph-nodes">
-              {graphNodes.map((node) => (
-                <a href={`/blog/${node.slug}`} aria-label={`Open ${node.title}`}>
-                  <circle cx={node.x} cy={node.y} r="8" />
-                  <text x={node.x + 15} y={node.y + 4}>{node.title.length > 25 ? `${node.title.slice(0, 25)}…` : node.title}</text>
-                </a>
-              ))}
-            </g>
-          </svg>
         </div>
       </section>
 
@@ -194,57 +155,5 @@ const graphHeight = Math.max(210, Math.ceil(graphNodes.length / 3) * 104 + 44);
 
   [data-search-card][hidden] {
     display: none;
-  }
-
-  .knowledge-graph {
-    min-height: 210px;
-    background:
-      linear-gradient(rgba(59, 130, 246, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(59, 130, 246, 0.035) 1px, transparent 1px),
-      var(--bg-elevated);
-    background-size: 32px 32px;
-  }
-
-  .graph-edges line {
-    stroke: var(--border-hover);
-    stroke-width: 1;
-    stroke-dasharray: 3 5;
-    opacity: 0.8;
-  }
-
-  .graph-nodes a {
-    cursor: pointer;
-  }
-
-  .graph-nodes circle {
-    fill: var(--accent);
-    stroke: var(--bg-elevated);
-    stroke-width: 4;
-    transition: r 0.2s ease, fill 0.2s ease;
-  }
-
-  .graph-nodes text {
-    fill: var(--text-muted);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    transition: fill 0.2s ease;
-  }
-
-  .graph-nodes a:hover circle,
-  .graph-nodes a:focus-visible circle {
-    r: 11;
-    fill: var(--accent-hover);
-  }
-
-  .graph-nodes a:hover text,
-  .graph-nodes a:focus-visible text {
-    fill: var(--text);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .graph-nodes circle,
-    .graph-nodes text {
-      transition: none;
-    }
   }
 </style>
