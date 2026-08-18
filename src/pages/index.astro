@@ -2,7 +2,7 @@
 /**
  * index.astro — Single-page portfolio.
  * All sections live on one continuous page with smooth scroll navigation.
- * Components are rendered in order: Hero → About → Experience → Education →
+ * Components are rendered in order: Hero → Experience → About → Education →
  * Skills → Projects → Writeups → Achievements → Contact → Footer.
  */
 import Layout from '../layouts/Layout.astro';
@@ -23,8 +23,8 @@ import Footer from '../components/Footer.astro';
   <Navbar />
   <main id="main-content">
     <Hero />
-    <About />
     <Experience />
+    <About />
     <Education />
     <Skills />
     <Projects />

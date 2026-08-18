@@ -1,0 +1,96 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+type CaseStudyProps = {
+  study: CollectionEntry<'caseStudies'>;
+};
+
+export async function getStaticPaths() {
+  const studies = await getCollection('caseStudies', ({ data }) => !data.draft);
+  return studies.map((study) => ({
+    params: { slug: study.slug },
+    props: { study },
+  }));
+}
+
+const { study } = Astro.props as CaseStudyProps;
+const { Content } = await study.render();
+---
+
+<Layout title={`${study.data.title} Case Study | Abdul Hakim Shifat`} description={study.data.description}>
+  <Navbar />
+  <main id="main-content" class="min-h-screen pt-32 pb-24">
+    <div class="max-w-[900px] mx-auto px-6">
+      <a href="/" class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-500 hover:text-blue-400 transition-colors reveal">
+        <span aria-hidden="true">←</span> Back to portfolio
+      </a>
+
+      <header class="case-study-header mt-12 mb-12 reveal">
+        <div class="flex flex-wrap items-center gap-3 mb-6">
+          <span class="text-[11px] font-mono uppercase tracking-[0.2em] text-blue-400 bg-blue-400/10 border border-blue-400/20 rounded-md px-2.5 py-1">{study.data.category}</span>
+          <span class="text-xs font-mono text-zinc-600">Case study</span>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tight leading-[1.05] text-white mb-6">{study.data.title}</h1>
+        <p class="max-w-3xl text-lg md:text-xl leading-relaxed text-zinc-400 mb-8">{study.data.description}</p>
+        <div class="flex flex-wrap items-center gap-3">
+          <a href={study.data.repo} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white hover:bg-blue-500 transition-colors">
+            View source repository <span aria-hidden="true">↗</span>
+          </a>
+          <span class="text-xs font-mono text-zinc-500">Evidence-backed from the repository</span>
+        </div>
+      </header>
+
+      <section class="case-study-facts grid sm:grid-cols-2 gap-4 mb-14 reveal" aria-label="Case study facts">
+        <div class="rounded-xl border border-zinc-800 bg-zinc-900/30 p-5">
+          <p class="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600 mb-3">Repository</p>
+          <a href={study.data.repo} target="_blank" rel="noopener noreferrer" class="break-all text-sm text-zinc-300 hover:text-blue-400 transition-colors">{study.data.repo.replace('https://github.com/', '')}</a>
+        </div>
+        <div class="rounded-xl border border-zinc-800 bg-zinc-900/30 p-5">
+          <p class="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600 mb-3">Stack</p>
+          <div class="flex flex-wrap gap-2">
+            {study.data.stack.map((item) => <span class="rounded-md bg-zinc-800/70 px-2.5 py-1 text-[11px] font-mono uppercase tracking-wider text-zinc-400">{item}</span>)}
+          </div>
+        </div>
+      </section>
+
+      <article class="prose article-body case-study-body max-w-none reveal" aria-label={`${study.data.title} case study`}>
+        <Content />
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style is:global>
+  .case-study-header::after {
+    display: block;
+    width: 4rem;
+    height: 2px;
+    margin-top: 3rem;
+    content: '';
+    background: var(--accent);
+  }
+
+  .case-study-body {
+    border-top: 1px solid var(--border);
+    padding-top: 3rem;
+  }
+
+  .case-study-facts > div {
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .case-study-facts > div:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case-study-facts > div:hover {
+      transform: none;
+    }
+  }
+</style>
