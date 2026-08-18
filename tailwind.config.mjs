@@ -5,9 +5,9 @@ export default {
       extend: {
         colors: {
           blue: {
-            400: '#c997ff',
-            500: '#b879f5',
-            600: '#a85be8',
+            400: '#20bfd1',
+            500: '#149caf',
+            600: '#0d7183',
           },
         },
         fontFamily: {
