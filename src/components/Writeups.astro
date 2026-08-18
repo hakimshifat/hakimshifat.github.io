@@ -6,6 +6,7 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const featuredPosts = allPosts.filter((post) => post.data.featured);
 const posts = (featuredPosts.length > 0 ? featuredPosts : allPosts).slice(0, 4);
+const latestPosts = allPosts.filter((post) => !post.data.featured).slice(0, 3);
 ---
 
 <section id="writeups" class="py-24 md:py-32">
@@ -39,6 +40,26 @@ const posts = (featuredPosts.length > 0 ? featuredPosts : allPosts).slice(0, 4);
         </a>
       ))}
     </div>
+
+    {latestPosts.length > 0 && (
+      <div class="mt-12 reveal">
+        <div class="flex items-center gap-4 mb-6">
+          <h3 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Latest Notes</h3>
+          <div class="h-px flex-1 bg-zinc-800"></div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-4">
+          {latestPosts.map((post) => (
+            <a href={`/blog/${post.slug}`} class="group border border-zinc-800 rounded-lg p-4 hover:border-zinc-700 transition-colors duration-200">
+              <div class="flex items-center justify-between gap-3 mb-2">
+                <span class="text-[10px] font-mono uppercase tracking-wider text-blue-400">{post.data.type || 'article'}</span>
+                <span class="text-[10px] font-mono text-zinc-500">{post.data.pubDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+              </div>
+              <h4 class="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors duration-200">{post.data.title}</h4>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
     
     <div class="mt-12 text-center reveal">
       <a href="/blog" class="inline-flex items-center gap-2 text-sm font-mono uppercase tracking-widest text-zinc-400 hover:text-white transition-colors duration-200">
