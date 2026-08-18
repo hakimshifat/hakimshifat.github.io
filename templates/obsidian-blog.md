@@ -11,7 +11,7 @@ tags:
   -
 ---
 
-# {{title}}
+# Article title
 
 <!-- Paste screenshots directly into the section below. Obsidian will save them in public/images/blog/ automatically. -->
 

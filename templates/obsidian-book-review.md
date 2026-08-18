@@ -17,7 +17,7 @@ rating: ""
 status: finished
 ---
 
-# {{title}}
+# Book title — Review
 
 <!-- Optional cover or reading-note image. Pasted images are stored in public/images/blog/ automatically. -->
 

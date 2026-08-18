@@ -12,7 +12,7 @@ tags:
   - career
 ---
 
-# {{title}}
+# Experience entry
 
 ## Role snapshot
 

@@ -11,7 +11,7 @@ tags:
   - ctf
 ---
 
-# {{title}}
+# Writeup title
 
 ## Challenge overview
 
