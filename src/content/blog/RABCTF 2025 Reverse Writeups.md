@@ -2,7 +2,9 @@
 title: "RABCTF 2026 Reverse Writeups"
 description: "Writeups for RABCTF 2025 Reverse challenge category - Strings, Password Checker, XOR Baby"
 pubDate: "2026-04-23"
-tags: ["CTF", "Reverse", "RABCTF"]
+tags: ["ctf", "reverse-engineering", "rabctf"]
+type: writeup
+featured: true
 heroImage: "/images/blog/rabctf.png"
 ---
 

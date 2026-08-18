@@ -3,6 +3,7 @@ title: "Nice - The Priority Scheduling Modification"
 description: "Understanding Linux nice values and priority scheduling for process management."
 pubDate: "2026-01-15"
 tags: ["linux", "process-management", "scheduling"]
+type: note
 heroImage: "/media/linux1.png"
 ---
 

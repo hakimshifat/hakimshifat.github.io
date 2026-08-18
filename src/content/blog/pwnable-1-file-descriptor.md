@@ -2,7 +2,9 @@
 title: "Pwnable 1 - File Descriptor"
 description: "\"Introduction to Linux file descriptor\""
 pubDate: "2026-05-01"
-tags: ["ctf","pwn"]
+tags: ["ctf", "pwn", "linux"]
+type: writeup
+featured: true
 ---
 ![](/images/blog/pwnable-1-file-descriptor/Pasted%20image%2020260501122824.png)
 

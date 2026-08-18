@@ -3,6 +3,8 @@ title: "Multi-Stream Audio: Connect Two Bluetooth Headphones on Arch Linux"
 description: "A guide to routing audio to two Bluetooth headphones simultaneously on Arch Linux using PipeWire, qjackctl, and pavucontrol."
 pubDate: "2026-01-10"
 tags: ["linux", "arch-linux", "pipewire", "bluetooth", "audio"]
+type: guide
+featured: true
 heroImage: "/media/arch1.png"
 ---
 

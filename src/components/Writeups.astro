@@ -1,10 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
 
-// Get posts, sort by date descending, take top 4
-const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 4);
+// Use curated featured notes when available; otherwise fall back to recent notes.
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const featuredPosts = allPosts.filter((post) => post.data.featured);
+const posts = (featuredPosts.length > 0 ? featuredPosts : allPosts).slice(0, 4);
 ---
 
 <section id="writeups" class="py-24 md:py-32">
@@ -12,7 +13,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
     <div class="flex items-center gap-4 mb-16 reveal">
       <span class="text-xs font-mono text-blue-400 tracking-wider">04.8</span>
       <div class="h-px flex-1 bg-zinc-800"></div>
-      <h2 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">CTF Writeups & Notes</h2>
+      <h2 class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Featured Writing</h2>
     </div>
 
     <div class="grid md:grid-cols-2 gap-6 stagger">
@@ -41,7 +42,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
     
     <div class="mt-12 text-center reveal">
       <a href="/blog" class="inline-flex items-center gap-2 text-sm font-mono uppercase tracking-widest text-zinc-400 hover:text-white transition-colors duration-200">
-        View All Writeups
+        View All Writing
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg>
