@@ -2,7 +2,7 @@
 /**
  * Achievements — CTF competition results in a responsive grid.
  * Data sourced from achievements.astro page.
- * Color-coded badges: purple for international, amber for national, cyan for ICPC.
+ * Subtle badges distinguish competition categories within the shared dark palette.
  */
 const achievements = [
   { title: 'TexSAW 2026',               position: '22nd',         date: 'Feb 2026',  type: 'International' },
@@ -21,11 +21,11 @@ const achievements = [
 function badgeClasses(type: string): string {
   switch (type) {
     case 'International':
-      return 'text-purple-400 bg-purple-400/10 border-purple-400/20';
+      return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
     case 'National':
-      return 'text-amber-400 bg-amber-400/10 border-amber-400/20';
+      return 'text-zinc-300 bg-zinc-400/10 border-zinc-400/20';
     default:
-      return 'text-cyan-400 bg-cyan-400/10 border-cyan-400/20';
+      return 'text-zinc-500 bg-zinc-500/10 border-zinc-500/20';
   }
 }
 ---

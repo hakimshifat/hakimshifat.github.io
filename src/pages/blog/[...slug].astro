@@ -7,6 +7,7 @@ import Footer from '../../components/Footer.astro';
 type BlogPageProps = {
   post: CollectionEntry<'blog'>;
   related: CollectionEntry<'blog'>[];
+  backlinks: CollectionEntry<'blog'>[];
 };
 
 export async function getStaticPaths() {
@@ -18,15 +19,22 @@ export async function getStaticPaths() {
       .filter((candidate) => candidate.data.tags.some((tag) => post.data.tags.includes(tag)))
       .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
       .slice(0, 3);
+    const backlinks = posts
+      .filter((candidate) => candidate.slug !== post.slug)
+      .filter((candidate) => {
+        const body = candidate.body ?? '';
+        return body.includes(`[[${post.data.title}`) || body.includes(`/blog/${post.slug}`);
+      })
+      .slice(0, 5);
 
     return {
       params: { slug: post.slug },
-      props: { post, related },
+      props: { post, related, backlinks },
     };
   });
 }
 
-const { post, related } = Astro.props as BlogPageProps;
+const { post, related, backlinks } = Astro.props as BlogPageProps;
 const { Content } = await post.render();
 const wordCount = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
 const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
@@ -114,6 +122,23 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
       <article class="prose article-body max-w-none reveal" aria-label="Article content">
         <Content />
       </article>
+
+      {backlinks.length > 0 && (
+        <aside class="mt-20 pt-10 border-t border-zinc-800 reveal" aria-labelledby="backlinks-title">
+          <div class="flex items-center gap-4 mb-8">
+            <h2 id="backlinks-title" class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Referenced by</h2>
+            <div class="h-px flex-1 bg-zinc-800"></div>
+          </div>
+          <div class="grid gap-3">
+            {backlinks.map((note) => (
+              <a href={`/blog/${note.slug}`} class="group flex items-center justify-between gap-4 rounded-xl border border-zinc-800 p-4 hover:border-zinc-700 hover:bg-zinc-900/30 transition-all duration-300">
+                <span class="text-sm text-zinc-300 group-hover:text-blue-400 transition-colors duration-200">{note.data.title}</span>
+                <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-600">backlink ↗</span>
+              </a>
+            ))}
+          </div>
+        </aside>
+      )}
 
       {related.length > 0 && (
         <aside class="mt-20 pt-10 border-t border-zinc-800 reveal" aria-labelledby="related-notes-title">
@@ -498,21 +523,13 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
     border-left-color: var(--accent-hover);
   }
 
-  .article-body .callout-tip {
-    border-left-color: #34d399;
-    background: rgba(16, 185, 129, 0.07);
-  }
-
+  .article-body .callout-tip,
   .article-body .callout-warning,
-  .article-body .callout-caution {
-    border-left-color: #fbbf24;
-    background: rgba(245, 158, 11, 0.07);
-  }
-
+  .article-body .callout-caution,
   .article-body .callout-danger,
   .article-body .callout-error {
-    border-left-color: #fb7185;
-    background: rgba(244, 63, 94, 0.07);
+    border-left-color: var(--accent);
+    background: rgba(59, 130, 246, 0.06);
   }
 
   @media (max-width: 640px) {

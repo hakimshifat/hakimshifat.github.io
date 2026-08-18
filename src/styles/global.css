@@ -104,6 +104,34 @@
 .stagger > .reveal:nth-child(9)  { transition-delay: 640ms; }
 .stagger > .reveal:nth-child(10) { transition-delay: 720ms; }
 
+@keyframes page-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes graph-node-breathe {
+  0%, 100% { opacity: 0.82; }
+  50% { opacity: 1; }
+}
+
+main {
+  animation: page-enter 0.45s ease-out both;
+}
+
+.archive-overview > div {
+  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.archive-overview > div:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-hover);
+  background-color: rgba(24, 24, 27, 0.55);
+}
+
+.graph-nodes circle {
+  animation: graph-node-breathe 4s ease-in-out infinite;
+}
+
 /* ─── Respect Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -114,5 +142,14 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  main,
+  .graph-nodes circle {
+    animation: none;
+  }
+
+  .archive-overview > div:hover {
+    transform: none;
   }
 }

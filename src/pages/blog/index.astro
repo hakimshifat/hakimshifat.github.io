@@ -7,6 +7,24 @@ import Footer from '../../components/Footer.astro';
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+const tagCounts = posts.flatMap((post) => post.data.tags).reduce<Record<string, number>>((counts, tag) => {
+  counts[tag] = (counts[tag] ?? 0) + 1;
+  return counts;
+}, {});
+const topTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).slice(0, 8);
+const types = Array.from(new Set(posts.map((post) => post.data.type))).sort();
+const graphNodes = posts.map((post, index) => ({
+  slug: post.slug,
+  title: post.data.title,
+  x: 82 + (index % 3) * 220,
+  y: 54 + Math.floor(index / 3) * 104,
+  tags: post.data.tags,
+}));
+const graphEdges = graphNodes.flatMap((from, index) => graphNodes.slice(index + 1).flatMap((to) => {
+  const shared = from.tags.filter((tag) => to.tags.includes(tag));
+  return shared.length > 0 ? [{ from, to }] : [];
+}));
+const graphHeight = Math.max(210, Math.ceil(graphNodes.length / 3) * 104 + 44);
 ---
 
 <Layout title="Archive | Abdul Hakim Shifat">
@@ -19,6 +37,64 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
         <div class="h-px flex-1 bg-zinc-800"></div>
       </div>
       
+      <div class="archive-overview grid sm:grid-cols-3 gap-3 mb-10 reveal">
+        <div class="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4">
+          <p class="text-2xl font-semibold text-white">{posts.length}</p>
+          <p class="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500">Published notes</p>
+        </div>
+        <div class="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4">
+          <p class="text-2xl font-semibold text-white">{topTags.length}</p>
+          <p class="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500">Active topics</p>
+        </div>
+        <div class="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4">
+          <p class="text-2xl font-semibold text-white">{types.length}</p>
+          <p class="mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500">Note types</p>
+        </div>
+      </div>
+
+      <section class="mb-10 reveal" aria-labelledby="explore-archive-title">
+        <div class="flex items-center gap-4 mb-4">
+          <h2 id="explore-archive-title" class="text-xs font-mono uppercase tracking-[0.2em] text-zinc-500">Explore the archive</h2>
+          <div class="h-px flex-1 bg-zinc-800"></div>
+        </div>
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by note type or tag">
+          <button type="button" data-filter="all" class="archive-filter is-active rounded-md border border-blue-400/30 bg-blue-400/10 px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-blue-400 transition-colors">All notes</button>
+          {types.map((type) => (
+            <button type="button" data-filter={type} class="archive-filter rounded-md border border-zinc-800 px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-zinc-500 transition-colors hover:border-zinc-700 hover:text-zinc-300">{type}</button>
+          ))}
+          {topTags.map(([tag, count]) => (
+            <button type="button" data-filter={tag} class="archive-filter rounded-md border border-zinc-800 px-3 py-2 text-[10px] font-mono uppercase tracking-wider text-zinc-500 transition-colors hover:border-zinc-700 hover:text-zinc-300">#{tag} <span class="text-zinc-600">{count}</span></button>
+          ))}
+        </div>
+      </section>
+
+      <section class="archive-graph mb-12 reveal" aria-labelledby="knowledge-graph-title">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <div>
+            <h2 id="knowledge-graph-title" class="text-xs font-mono uppercase tracking-[0.2em] text-zinc-500">Knowledge graph</h2>
+            <p class="mt-2 text-sm text-zinc-500">Notes are connected when they share a topic. Click a node to open it.</p>
+          </div>
+          <span class="hidden sm:inline text-[10px] font-mono uppercase tracking-wider text-zinc-600">{graphEdges.length} connections</span>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/20">
+          <svg class="knowledge-graph min-w-[760px] w-full" viewBox={`0 0 760 ${graphHeight}`} role="img" aria-label="Knowledge graph of published notes">
+            <g class="graph-edges" aria-hidden="true">
+              {graphEdges.map(({ from, to }) => (
+                <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} />
+              ))}
+            </g>
+            <g class="graph-nodes">
+              {graphNodes.map((node) => (
+                <a href={`/blog/${node.slug}`} aria-label={`Open ${node.title}`}>
+                  <circle cx={node.x} cy={node.y} r="8" />
+                  <text x={node.x + 15} y={node.y + 4}>{node.title.length > 25 ? `${node.title.slice(0, 25)}…` : node.title}</text>
+                </a>
+              ))}
+            </g>
+          </svg>
+        </div>
+      </section>
+
       <div class="mb-10 reveal">
         <label for="archive-search" class="block text-xs font-mono uppercase tracking-[0.2em] text-zinc-500 mb-3">Search the archive</label>
         <input
@@ -36,6 +112,8 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
             href={`/blog/${post.slug}`}
             data-search-card
             data-search={`${post.data.title} ${post.data.description} ${post.data.type} ${post.data.tags.join(' ')}`.toLowerCase()}
+            data-type={post.data.type}
+            data-tags={post.data.tags.join('|')}
             class="group p-6 border border-zinc-800 rounded-xl hover:border-zinc-700 hover:bg-zinc-900/30 transition-all duration-300 reveal cursor-pointer relative overflow-hidden h-full flex flex-col block"
           >
             <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -72,21 +150,101 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
   const searchInput = document.getElementById('archive-search') as HTMLInputElement | null;
   const resultCount = document.getElementById('archive-results-count');
   const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-search-card]'));
+  const filters = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+  let activeFilter = 'all';
 
-  searchInput?.addEventListener('input', () => {
-    const query = searchInput.value.trim().toLowerCase();
+  const applyArchiveFilters = () => {
+    const query = searchInput?.value.trim().toLowerCase() ?? '';
     let visibleCount = 0;
 
     cards.forEach((card) => {
-      const matches = !query || card.dataset.search?.includes(query);
+      const matchesQuery = !query || card.dataset.search?.includes(query);
+      const filter = activeFilter.toLowerCase();
+      const matchesFilter = filter === 'all'
+        || card.dataset.type === activeFilter
+        || card.dataset.tags?.toLowerCase().split('|').includes(filter);
+      const matches = matchesQuery && matchesFilter;
       card.hidden = !matches;
       if (matches) visibleCount += 1;
     });
 
     if (resultCount) {
-      resultCount.textContent = query
+      resultCount.textContent = query || activeFilter !== 'all'
         ? `Showing ${visibleCount} matching note${visibleCount === 1 ? '' : 's'}`
         : `Showing ${cards.length} published notes`;
     }
+  };
+
+  searchInput?.addEventListener('input', applyArchiveFilters);
+  filters.forEach((filterButton) => {
+    filterButton.addEventListener('click', () => {
+      activeFilter = filterButton.dataset.filter ?? 'all';
+      filters.forEach((button) => button.classList.toggle('is-active', button === filterButton));
+      applyArchiveFilters();
+    });
   });
 </script>
+
+<style is:global>
+  .archive-filter.is-active {
+    border-color: rgba(59, 130, 246, 0.35);
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent-hover);
+  }
+
+  [data-search-card][hidden] {
+    display: none;
+  }
+
+  .knowledge-graph {
+    min-height: 210px;
+    background:
+      linear-gradient(rgba(59, 130, 246, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.035) 1px, transparent 1px),
+      var(--bg-elevated);
+    background-size: 32px 32px;
+  }
+
+  .graph-edges line {
+    stroke: var(--border-hover);
+    stroke-width: 1;
+    stroke-dasharray: 3 5;
+    opacity: 0.8;
+  }
+
+  .graph-nodes a {
+    cursor: pointer;
+  }
+
+  .graph-nodes circle {
+    fill: var(--accent);
+    stroke: var(--bg-elevated);
+    stroke-width: 4;
+    transition: r 0.2s ease, fill 0.2s ease;
+  }
+
+  .graph-nodes text {
+    fill: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    transition: fill 0.2s ease;
+  }
+
+  .graph-nodes a:hover circle,
+  .graph-nodes a:focus-visible circle {
+    r: 11;
+    fill: var(--accent-hover);
+  }
+
+  .graph-nodes a:hover text,
+  .graph-nodes a:focus-visible text {
+    fill: var(--text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .graph-nodes circle,
+    .graph-nodes text {
+      transition: none;
+    }
+  }
+</style>
