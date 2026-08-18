@@ -44,15 +44,21 @@ Wiki links are converted to `/blog/<slug>/` links at build time. Standard Markdo
 
 ## Embedded images
 
-Use vault-relative embedded wikilinks for images. Keep the `public/` prefix because the repository is also an Obsidian vault:
+You can now use ordinary Markdown image syntax in notes:
+
+```md
+![](<public/images/blog/Pasted image 20260110095402.png>)
+```
+
+Obsidian previews this directly from the cloned vault. During the Astro build, the custom Markdown transformer resolves the path against `public/images/` and emits the corresponding `/images/...` URL for the published website. It also still supports embedded wikilinks when you prefer them:
 
 ```md
 ![[public/images/blog/Pasted image 20260110095402.png|Patchbay screenshot]]
 ```
 
-Obsidian previews this directly from the cloned vault. During the Astro build, the custom Markdown transformer converts the same embed into `/images/blog/...`, so the published website uses the corresponding file from `public/images/`. Avoid website-only paths such as `![](/images/blog/example.png)` when writing new notes; those work in the browser but do not resolve from an Obsidian vault.
+For the least friction, write normal Markdown paths beginning with `public/images/`. If a filename contains spaces, wrap the destination in angle brackets as shown above. The build also recognizes an unqualified unique filename when the matching asset exists under `public/images/`. Website-only paths such as `![](/images/blog/example.png)` remain supported, but they are not previewable from an Obsidian vault unless the equivalent file is also available at that absolute path.
 
-Keep image filenames and folders synchronized with the actual files under `public/`. Spaces are fine in Obsidian wikilinks; do not URL-encode them inside the wikilink.
+Keep image filenames and folders synchronized with the actual files under `public/`. Do not URL-encode spaces while authoring vault-relative paths; use angle brackets for standard Markdown or spaces directly inside an Obsidian wikilink.
 
 ## Callouts
 

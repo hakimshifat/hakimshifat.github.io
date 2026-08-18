@@ -16,8 +16,10 @@ tags:
 Optional screenshot or artifact:
 
 ```md
-![[public/images/blog/your-image.png|Short description]]
+![](public/images/blog/your-image.png)
 ```
+
+The build also accepts `![[public/images/blog/your-image.png|Short description]]` if you prefer Obsidian wikilinks.
 
 What was the challenge, target, or research question?
 

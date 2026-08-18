@@ -34,7 +34,7 @@ We use `qjackctl` as a visual bridge. Since we are using PipeWire, we need to ru
 pw-jack qjackctl &
 ```
 
-![[public/images/blog/Pasted image 20260110095402.png]]
+![](<public/images/blog/Pasted image 20260110095402.png>)
 
 ---
 
@@ -51,4 +51,4 @@ The magic happens in the **Graph** (or Patchbay) window.
 
 Open `pavucontrol` (PulseAudio Volume Control) to adjust the individual volumes of each headset, as one friend might prefer it louder than the other.
 
-![[public/images/blog/Pasted image 20260107225026.png]]
+![](<public/images/blog/Pasted image 20260107225026.png>)

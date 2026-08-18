@@ -23,25 +23,25 @@ sudo pacman -S --needed lutris wine-staging giflib lib32-giflib \
   mesa lib32-mesa lib32-libx11 lib32-libxss
 ```
 
-![[public/images/blog/Pasted image 20251228184750.png]]
+![](<public/images/blog/Pasted image 20251228184750.png>)
 
-![[public/images/blog/Pasted image 20251228184938.png]]
-![[public/images/blog/Pasted image 20251228185129.png]]
+![](<public/images/blog/Pasted image 20251228184938.png>)
+![](<public/images/blog/Pasted image 20251228185129.png>)
 
 Make sure you have GE-Proton (Latest) selected:
 
-![[public/images/blog/Pasted image 20251228185247.png]]
+![](<public/images/blog/Pasted image 20251228185247.png>)
 
 All set. Now only need to run the setup file.
 
-![[public/images/blog/Pasted image 20251228185445.png]]
+![](<public/images/blog/Pasted image 20251228185445.png>)
 
 Give a name. That will be the name of the prefix aka your Windows system folder name that will contain the game.
 
-![[public/images/blog/Pasted image 20251228185537.png]]
+![](<public/images/blog/Pasted image 20251228185537.png>)
 
 Go through Install -> Continue and then select setup file for your game. After it's done, right click on the game and click on *configure*. Then:
 
-![[public/images/blog/Pasted image 20251228185837.png]]
+![](<public/images/blog/Pasted image 20251228185837.png>)
 
 Go to *Game options* where you need to select the executable runner of the game.
