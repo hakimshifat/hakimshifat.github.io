@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 
 // Get posts, sort by date descending, take top 4
-const posts = (await getCollection('blog'))
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 4);
 ---
@@ -22,7 +22,7 @@ const posts = (await getCollection('blog'))
           <div class="relative z-10 flex flex-col flex-1">
             <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
               <span class="text-[11px] font-mono uppercase tracking-wider text-blue-400 bg-blue-400/10 px-2.5 py-1 rounded-md border border-blue-400/20">
-                {post.data.tags?.[0] || 'Writeup'}
+                {post.data.type || post.data.tags?.[0] || 'Article'}
               </span>
               <span class="text-xs font-mono text-zinc-500">
                 {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}

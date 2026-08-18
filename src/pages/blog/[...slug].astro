@@ -4,43 +4,100 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
+type BlogPageProps = {
+  post: CollectionEntry<'blog'>;
+  related: CollectionEntry<'blog'>[];
+};
+
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: post,
-  }));
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return posts.map((post) => {
+    const related = posts
+      .filter((candidate) => candidate.slug !== post.slug)
+      .filter((candidate) => candidate.data.tags.some((tag) => post.data.tags.includes(tag)))
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+      .slice(0, 3);
+
+    return {
+      params: { slug: post.slug },
+      props: { post, related },
+    };
+  });
 }
 
-const post = Astro.props as CollectionEntry<'blog'>;
+const { post, related } = Astro.props as BlogPageProps;
 const { Content } = await post.render();
+const wordCount = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
+const readingMinutes = Math.max(1, Math.ceil(wordCount / 200));
+const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
 ---
 
 <Layout title={`${post.data.title} | Abdul Hakim Shifat`} description={post.data.description}>
   <Navbar />
-  
-  <main class="min-h-screen pt-32 pb-24">
+
+  <main id="main-content" class="min-h-screen pt-32 pb-24">
     <div class="max-w-[800px] mx-auto px-6">
       <div class="mb-12 reveal">
         <a href="/blog" class="text-xs font-mono uppercase tracking-widest text-zinc-500 hover:text-blue-400 transition-colors mb-8 inline-block">
           ← Back to Archive
         </a>
+        <div class="flex flex-wrap items-center gap-3 mb-5 text-[11px] font-mono uppercase tracking-wider text-blue-400">
+          <span class="bg-blue-400/10 px-2.5 py-1 rounded-md border border-blue-400/20">
+            {post.data.type || 'article'}
+          </span>
+          {post.data.series && <span class="text-zinc-500">Series: {post.data.series}</span>}
+        </div>
         <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight mb-6">
           {post.data.title}
         </h1>
-        <div class="flex items-center gap-4 text-sm font-mono text-zinc-400">
-          <span>{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        <p class="text-lg text-zinc-400 leading-relaxed mb-6">{post.data.description}</p>
+        <div class="flex flex-wrap items-center gap-3 text-sm font-mono text-zinc-400">
+          <span>{formattedDate}</span>
+          {post.data.updatedDate && (
+            <>
+              <span>·</span>
+              <span>Updated {post.data.updatedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+            </>
+          )}
           <span>·</span>
-          <span>{post.data.tags?.join(', ') || 'Writeup'}</span>
+          <span>{readingMinutes} min read</span>
+          <span>·</span>
+          <span>{post.data.tags?.join(', ') || 'article'}</span>
         </div>
       </div>
 
       <article class="prose max-w-none reveal">
         <Content />
       </article>
+
+      {related.length > 0 && (
+        <aside class="mt-20 pt-10 border-t border-zinc-800 reveal" aria-labelledby="related-notes-title">
+          <div class="flex items-center gap-4 mb-8">
+            <h2 id="related-notes-title" class="text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">Related notes</h2>
+            <div class="h-px flex-1 bg-zinc-800"></div>
+          </div>
+          <div class="grid gap-4">
+            {related.map((note) => (
+              <a href={`/blog/${note.slug}`} class="group block rounded-xl border border-zinc-800 p-5 hover:border-zinc-700 hover:bg-zinc-900/30 transition-all duration-300">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+                  <span class="text-[11px] font-mono uppercase tracking-wider text-blue-400">{note.data.type || 'article'}</span>
+                  <span class="text-xs font-mono text-zinc-500">{note.data.pubDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                </div>
+                <h3 class="text-base font-semibold text-white group-hover:text-blue-400 transition-colors duration-200">{note.data.title}</h3>
+                <p class="text-sm text-zinc-400 mt-2">{note.data.description}</p>
+              </a>
+            ))}
+          </div>
+        </aside>
+      )}
     </div>
   </main>
-  
+
   <Footer />
 </Layout>
 
