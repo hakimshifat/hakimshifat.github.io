@@ -1,6 +1,6 @@
 # hakimshifat.me
 
-Minimalist, single-page portfolio built with [Astro](https://astro.build), [Tailwind CSS](https://tailwindcss.com), and vanilla JavaScript. Dark monochrome design with subtle scroll-reveal animations and zero runtime frameworks.
+Security-focused portfolio and technical writing archive built with [Astro](https://astro.build), [Tailwind CSS](https://tailwindcss.com), and vanilla JavaScript. The site combines a curated professional portfolio with an Obsidian-friendly Markdown publishing workflow backed by GitHub.
 
 **Live →** [hakimshifat.me](https://hakimshifat.me)
 
@@ -16,6 +16,7 @@ Minimalist, single-page portfolio built with [Astro](https://astro.build), [Tail
 | **Projects** | Project cards with screenshots, tech tags, and GitHub links |
 | **Skills** | Categorized skill pills + certifications |
 | **Achievements** | 10 CTF competition results with color-coded type badges |
+| **Writing** | Obsidian-friendly Markdown archive with search, tags, related notes, and RSS-ready metadata |
 | **Contact** | Email, GitHub, LinkedIn, Discord |
 
 ---
@@ -28,6 +29,8 @@ Minimalist, single-page portfolio built with [Astro](https://astro.build), [Tail
 | Styling | [Tailwind CSS](https://tailwindcss.com) v3 — utility-first CSS |
 | Typography | [Inter](https://rsms.me/inter/) (body) + [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (code) |
 | Animations | CSS transitions + `IntersectionObserver` — no external libraries |
+| Content | Astro content collections, Markdown, Obsidian wiki-link transformer |
+| Metadata | Canonical URLs, Open Graph image, robots policy, and sitemap |
 | Deployment | [GitHub Pages](https://pages.github.com) via static build |
 
 ### What's intentionally *not* used
@@ -35,7 +38,7 @@ Minimalist, single-page portfolio built with [Astro](https://astro.build), [Tail
 - No runtime JS framework (React is a dep but unused — could be removed)
 - No animation libraries (GSAP, Framer Motion, Lenis)
 - No CSS-in-JS or CSS modules
-- No CMS or content collections at runtime
+- No runtime CMS; Markdown is rendered at build time from the repository
 
 ---
 
@@ -50,6 +53,9 @@ Minimalist, single-page portfolio built with [Astro](https://astro.build), [Tail
 │       └── yt2.png
 │
 ├── src/
+│   ├── content/
+│   │   ├── blog/                      # Published Markdown notes and writeups
+│   │   └── config.ts                  # Frontmatter schema and draft filtering
 │   ├── components/
 │   │   ├── Navbar.astro               # Sticky nav + mobile hamburger menu
 │   │   ├── Hero.astro                 # Full-viewport intro section
@@ -70,7 +76,9 @@ Minimalist, single-page portfolio built with [Astro](https://astro.build), [Tail
 │   └── styles/
 │       └── global.css                 # Design tokens, scroll-reveal, nav states
 │
-├── astro.config.mjs                   # Astro + Tailwind integration
+├── docs/obsidian-publishing.md        # Public writing workflow
+├── templates/                          # Copyable Obsidian note templates
+├── astro.config.mjs                   # Astro + Tailwind + sitemap integration
 ├── tailwind.config.mjs                # Font families + content paths
 ├── tsconfig.json
 ├── package.json
@@ -85,11 +93,11 @@ Minimalist, single-page portfolio built with [Astro](https://astro.build), [Tail
 
 ```
 astro build
-  → Reads src/pages/index.astro (single entry point)
-  → Resolves Layout.astro + 9 component imports
-  → Renders everything to static HTML at build time
-  → Tailwind tree-shakes CSS to only what's used
-  → Vite outputs: dist/index.html + 1 CSS file + 1 JS file
+  → Reads Astro pages and Markdown content collections
+  → Applies frontmatter validation and Obsidian wiki-link transforms
+  → Renders portfolio and published notes to static HTML
+  → Generates sitemap, robots policy, Open Graph assets, and RSS-ready metadata
+  → Tailwind tree-shakes CSS and Vite outputs the static site
 ```
 
 ### Runtime Behavior
@@ -166,7 +174,7 @@ Accent Hover   #60a5fa     (blue — hover state)
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org) ≥ 18
+- [Node.js](https://nodejs.org) ≥ 22
 - npm
 
 ### Install & Run
@@ -200,7 +208,9 @@ npm run build
 
 ## Deployment
 
-The site deploys to **GitHub Pages** automatically. The `CNAME` file maps the custom domain `hakimshifat.me`.
+The site deploys to **GitHub Pages** automatically through the workflow in `.github/workflows/`. The `CNAME` file maps the custom domain `hakimshifat.me`.
+
+For the complete Obsidian publishing conventions, see [`docs/obsidian-publishing.md`](docs/obsidian-publishing.md). Copyable note templates are available in [`templates/`](templates/).
 
 To deploy manually:
 
@@ -215,7 +225,9 @@ npm run build
 
 ### Changing Content
 
-All data (experience, projects, skills, achievements) is hardcoded in the respective component files under `src/components/`. Edit the arrays at the top of each `.astro` file.
+Portfolio data such as experience, projects, skills, and achievements is maintained in the respective component files under `src/components/`. Blog posts and technical notes live in `src/content/blog/` as Markdown files and use the schema documented in [`docs/obsidian-publishing.md`](docs/obsidian-publishing.md).
+
+The recommended workflow is to write in Obsidian, review a note, move it into the public publishing folder, and let GitHub Actions build the site. `draft: true` keeps a note out of the generated site, but private notes should never be pushed to a public repository.
 
 ### Changing Colors
 
